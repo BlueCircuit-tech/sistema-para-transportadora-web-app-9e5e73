@@ -1770,6 +1770,283 @@ function detalhe_do_pedido_ligarMotorista() {
       })();
     </script>
 
+    <section data-tela="controle-financeiro" class="hidden">
+    <div class="px-5 pt-2 pb-6 space-y-5">
+
+        <!-- Cabeçalho -->
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="font-display text-2xl font-bold text-marca-900 leading-tight">Controle Financeiro</h1>
+                <p class="text-sm text-gray-500 mt-0.5">Janeiro a Dezembro de 2025</p>
+            </div>
+            <button onclick="controle_financeiro_abrirExportar()" class="w-10 h-10 rounded-xl bg-marca-900 flex items-center justify-center active:scale-95 transition-all hover:shadow-lg hover:shadow-marca-900/20">
+                <svg class="w-5 h-5 text-marca-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            </button>
+        </div>
+
+        <!-- Cards KPI -->
+        <div class="grid grid-cols-2 gap-3">
+            <div id="kpi-faturamento" class="card p-4 rounded-2xl border border-gray-100 hover:border-marca-400/30 transition-all cursor-pointer" onclick="mostrarTela('orcamentos')">
+                <div class="flex items-center gap-2 mb-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center"><svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"/></svg></div>
+                    <span class="text-xs text-gray-500 font-medium">Faturamento</span>
+                </div>
+                <p class="font-display font-bold text-xl text-marca-900">R$ 0</p>
+                <p id="var-faturamento" class="text-xs mt-1 text-gray-400"></p>
+            </div>
+            <div class="card p-4 rounded-2xl border border-gray-100">
+                <div class="flex items-center gap-2 mb-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center"><svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg></div>
+                    <span class="text-xs text-gray-500 font-medium">Despesas Totais</span>
+                </div>
+                <p id="val-despesas" class="font-display font-bold text-xl text-marca-900">R$ 0</p>
+                <p id="var-despesas" class="text-xs mt-1 text-gray-400"></p>
+            </div>
+            <div class="card p-4 rounded-2xl border border-gray-100">
+                <div class="flex items-center gap-2 mb-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center"><svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+                    <span class="text-xs text-gray-500 font-medium">Comissões Pagas</span>
+                </div>
+                <p id="val-comissoes" class="font-display font-bold text-xl text-marca-900">R$ 0</p>
+                <p id="var-comissoes" class="text-xs mt-1 text-gray-400"></p>
+            </div>
+            <div class="card p-4 rounded-2xl border border-gray-100">
+                <div class="flex items-center gap-2 mb-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-marca-400/10 flex items-center justify-center"><svg class="w-4 h-4 text-marca-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+                    <span class="text-xs text-gray-500 font-medium">Lucro Líquido</span>
+                </div>
+                <p id="val-lucro" class="font-display font-bold text-xl text-marca-900">R$ 0</p>
+                <p id="var-lucro" class="text-xs mt-1 text-gray-400"></p>
+            </div>
+        </div>
+
+        <!-- Gráfico -->
+        <div class="card p-5 rounded-2xl border border-gray-100">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-display font-bold text-marca-900">Receita vs Despesa</h3>
+                <div class="flex items-center gap-3 text-xs">
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-0.5 rounded bg-marca-500"></span>Receita</span>
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-0.5 rounded bg-red-400"></span>Despesa</span>
+                </div>
+            </div>
+            <svg id="grafico-linhas" class="w-full" viewBox="0 0 340 160" preserveAspectRatio="none" style="overflow:visible"></svg>
+        </div>
+
+        <!-- Transações -->
+        <div>
+            <h3 class="font-display font-bold text-marca-900 mb-3">Transações Recentes</h3>
+            <div class="flex gap-2 mb-3 overflow-x-auto pb-1 scrollbar-none">
+                <button onclick="controle_financeiro_filtrar('todos',this)" data-filtro="todos" class="btn filtro-ativo whitespace-nowrap text-xs px-4 py-2 rounded-xl font-medium bg-marca-900 text-white">Todos</button>
+                <button onclick="controle_financeiro_filtrar('frete',this)" data-filtro="frete" class="btn whitespace-nowrap text-xs px-4 py-2 rounded-xl font-medium bg-gray-100 text-gray-600 hover:bg-gray-200">Frete</button>
+                <button onclick="controle_financeiro_filtrar('comissao',this)" data-filtro="comissao" class="btn whitespace-nowrap text-xs px-4 py-2 rounded-xl font-medium bg-gray-100 text-gray-600 hover:bg-gray-200">Comissão</button>
+                <button onclick="controle_financeiro_filtrar('vale',this)" data-filtro="vale" class="btn whitespace-nowrap text-xs px-4 py-2 rounded-xl font-medium bg-gray-100 text-gray-600 hover:bg-gray-200">Vale</button>
+                <button onclick="controle_financeiro_filtrar('despesa',this)" data-filtro="despesa" class="btn whitespace-nowrap text-xs px-4 py-2 rounded-xl font-medium bg-gray-100 text-gray-600 hover:bg-gray-200">Despesa Op.</button>
+            </div>
+            <div id="lista-transacoes" class="space-y-2.5"></div>
+            <div id="empty-transacoes" class="hidden text-center py-8">
+                <svg class="w-10 h-10 text-gray-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <p class="text-sm text-gray-400">Nenhuma transação encontrada</p>
+            </div>
+        </div>
+
+        <!-- Resumo Clientes -->
+        <div>
+            <h3 class="font-display font-bold text-marca-900 mb-3">Resumo por Cliente</h3>
+            <div id="lista-clientes" class="space-y-2.5"></div>
+        </div>
+
+        <!-- Resumo Motoristas -->
+        <div>
+            <h3 class="font-display font-bold text-marca-900 mb-3">Resumo por Motorista</h3>
+            <div id="lista-motoristas" class="space-y-2.5"></div>
+        </div>
+
+        <!-- Exportar -->
+        <button onclick="controle_financeiro_abrirExportar()" class="btn w-full bg-marca-900 text-white font-display font-bold py-3.5 rounded-2xl active:scale-[0.98] transition-all flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-marca-900/20">
+            <svg class="w-5 h-5 text-marca-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            Exportar Relatório PDF
+        </button>
+    </div>
+
+    <!-- Modal Exportar -->
+    <div id="modal-exportar" class="hidden fixed inset-0 z-50 flex items-end justify-center">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="fecharModal()"></div>
+        <div class="relative bg-white rounded-t-3xl p-6 w-full max-w-[430px] animate-slide-up">
+            <div class="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-5"></div>
+            <h3 class="font-display font-bold text-xl text-marca-900 mb-1">Exportar Relatório</h3>
+            <p class="text-sm text-gray-500 mb-5">Selecione o período e o tipo de relatório.</p>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1.5">Período</label>
+                    <select id="exp-periodo" class="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm font-body text-marca-900 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-marca-400/50 appearance-none">
+                        <option value="mes">Último mês</option><option value="trimestre">Último trimestre</option><option value="semestre">Último semestre</option><option value="ano">Último ano</option><option value="custom">Personalizado</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1.5">Tipo de relatório</label>
+                    <select id="exp-tipo" class="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm font-body text-marca-900 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-marca-400/50 appearance-none">
+                        <option value="completo">Relatório Completo</option><option value="receitas">Apenas Receitas</option><option value="despesas">Apenas Despesas</option><option value="comissoes">Comissões e Vales</option>
+                    </select>
+                </div>
+                <button onclick="controle_financeiro_exportar()" class="btn w-full bg-marca-900 text-white font-display font-bold py-3.5 rounded-2xl active:scale-[0.98] transition-all">Gerar e Baixar PDF</button>
+                <button onclick="fecharModal()" class="btn w-full bg-gray-100 text-gray-600 font-display font-semibold py-3 rounded-2xl active:scale-[0.98] transition-all">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        var meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+        var kpis = {faturamento:485000,despesas:312400,comissoes:72800,lucro:99800,
+            varFat:12.3,varDesp:5.8,varCom:-2.1,varLuc:24.6};
+        var dados = [
+            {m:0,r:285,d:185},{m:1,r:320,d:210},{m:2,r:378,d:248},{m:3,r:410,d:265},
+            {m:4,r:395,d:255},{m:5,r:445,d:290},{m:6,r:470,d:298},{m:7,r:438,d:272},
+            {m:8,r:412,d:260},{m:9,r:455,d:285},{m:10,r:498,d:305},{m:11,r:485,d:312}
+        ];
+        var trans = [
+            {id:1,tipo:'frete',desc:'Frete SP → RJ — Carga #2847',cli:'Brasil Foods',val:18500,dia:'2025-01-15',st:'pago'},
+            {id:2,tipo:'comissao',desc:'Comissão — Motorista Carlos',cli:'Carlos Mendes',val:2800,dia:'2025-01-14',st:'pago'},
+            {id:3,tipo:'vale',desc:'Vale combustível — Viagem 4471',cli:'Roberto Lima',val:450,dia:'2025-01-14',st:'pendente'},
+            {id:4,tipo:'frete',desc:'Frete MG → ES — Carga #2845',cli:'Grupo Vitória',val:12300,dia:'2025-01-13',st:'pago'},
+            {id:5,tipo:'despesa',desc:'Manutenção preventiva — Caminhão 07',cli:'Oficina Central',val:3200,dia:'2025-01-13',st:'pago'},
+            {id:6,tipo:'frete',desc:'Frete RJ → BA — Carga #2843',cli:'Atacadão Norte',val:24800,dia:'2025-01-12',st:'pago'},
+            {id:7,tipo:'comissao',desc:'Comissão — Motorista João',cli:'João Silva',val:1950,dia:'2025-01-11',st:'pago'},
+            {id:8,tipo:'vale',desc:'Vale pedágio — Viagem 4468',cli:'Paulo Santos',val:180,dia:'2025-01-11',st:'pago'},
+            {id:9,tipo:'despesa',desc:'Seguro do veículo — Janeiro/25',cli:'Porto Seguro',val:890,dia:'2025-01-10',st:'pago'},
+            {id:10,tipo:'frete',desc:'Frete PR → SC — Carga #2840',cli:'Madeireira Sul',val:9800,dia:'2025-01-10',st:'pendente'}
+        ];
+        var clientes = [
+            {n:'Brasil Foods',fat:127500,q:18},
+            {n:'Grupo Vitória',fat:98400,q:14},
+            {n:'Atacadão Norte',fat:87600,q:12},
+            {n:'Madeireira Sul',fat:67200,q:9}
+        ];
+        var motoristas = [
+            {n:'Carlos Mendes',v:'Caminhão Truck — ABC-1234',com:32400,viagens:42},
+            {n:'João Silva',v:'Carreta — DEF-5678',com:28100,viagens:38},
+            {n:'Roberto Lima',v:'Toco — GHI-9012',com:18900,viagens:29},
+            {n:'Paulo Santos',v:'VUC — JKL-3456',com:14200,viagens:24}
+        ];
+
+        function num(v){return v.toLocaleString('pt-BR',{minimumFractionDigits:2})}
+        function fkpi(id,v,ic,tc,vg){
+            var e=document.getElementById(id);if(e)e.innerHTML='<p class="font-display font-bold text-xl text-marca-900">R$ '+num(v)+'</p><p class="text-xs mt-1 font-medium '+vg+'">'+ic+' '+num(Math.abs(tc))+'% <span class="font-normal text-gray-400">vs mês anterior</span></p>';
+        }
+        function statusCfg(s){return{s:pago:{bg:'bg-emerald-50',tx:'text-emerald-700',lb:'Pago'},pendente:{bg:'bg-amber-50',tx:'text-amber-700',lb:'Pendente'},cancelado:{bg:'bg-red-50',tx:'text-red-600',lb:'Cancelado'}}[s]||{bg:'bg-gray-100',tx:'text-gray-500',lb:s}}}
+        function tipoCfg(t){return{frete:{bg:'bg-blue-50',tx:'text-blue-600',lb:'Frete'},comissao:{bg:'bg-emerald-50',tx:'text-emerald-600',lb:'Comissão'},vale:{bg:'bg-amber-50',tx:'text-amber-600',lb:'Vale'},despesa:{bg:'bg-red-50',tx:'text-red-500',lb:'Desp. Op.'}}[t]||{bg:'bg-gray-100',tx:'text-gray-500',lb:t}}}
+        function tipoIcon(t){
+            var p={frete:'M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4',comissao:'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z',vale:'M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3 2.25h6m-6 2.25h3M5.25 19.5h13.5c.621 0 1.125-.504 1.125-1.125V18a1.5 1.5 0 00-1.5-1.5H6a1.5 1.5 0 00-1.5 1.5v.375c0 .621.504 1.125 1.125 1.125',despesa:'M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h9v3m-9 0h6'};
+            return'<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="'+p[t]+'"/></svg>';
+        }
+        function corAvatar(n){var h=0;for(var i=0;i<n.length;i++)h=n.charCodeAt(i)+((h<<5)-h);var c=['#D4AF37','#0A0A0A','#D97706','#1E3A5F','#065F46','#7C3AED'];return c[Math.abs(h)%c.length]}
+
+        window.controle_financeiro_grafico=function(){
+            var mx=Math.max.apply(null,dados.map(function(x){return x.r}));
+            var w=340,h=160,px=30,py=20,bw=w-2*px,bh=h-2*py-20;
+            var ptsR=dados.map(function(x,i){return{x:px+i*(bw/11),y:py+bh-(x.r/mx)*bh}});
+            var ptsD=dados.map(function(x,i){return{x:px+i*(bw/11),y:py+bh-(x.d/mx)*bh}});
+            var line=function(pts){return pts.map(function(p,i){return(i===0?'M':'L')+p.x.toFixed(1)+','+p.y.toFixed(1)}).join(' ')};
+            var area=function(pts){return line(pts)+' L'+pts[pts.length-1].x+','+(py+bh)+' L'+pts[0].x+','+(py+bh)+' Z'};
+            var gr='<defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#D4AF37" stop-opacity="0.15"/><stop offset="100%" stop-color="#D4AF37" stop-opacity="0"/></linearGradient></defs>';
+            gr+='<line x1="'+px+'" y1="'+py+'" x2="'+(w-px)+'" y1="'+py+'" stroke="#F3F4F6" stroke-width="1"/>';
+            gr+='<line x1="'+px+'" y1="'+(py+bh*0.25)+'" x2="'+(w-px)+'" y1="'+(py+bh*0.25)+'" stroke="#F3F4F6" stroke-width="1"/>';
+            gr+='<line x1="'+px+'" y1="'+(py+bh*0.5)+'" x2="'+(w-px)+'" y1="'+(py+bh*0.5)+'" stroke="#F3F4F6" stroke-width="1"/>';
+            gr+='<line x1="'+px+'" y1="'+(py+bh*0.75)+'" x2="'+(w-px)+'" y1="'+(py+bh*0.75)+'" stroke="#F3F4F6" stroke-width="1"/>';
+            gr+='<line x1="'+px+'" y1="'+(py+bh)+'" x2="'+(w-px)+'" y1="'+(py+bh)+'" stroke="#E5E7EB" stroke-width="1"/>';
+            var yl=['400k','300k','200k','100k','0'];
+            yl.forEach(function(l,i){gr+='<text x="'+(px-5)+'" y="'+(py+i*bh*0.25+4)+'" text-anchor="end" font-size="9" fill="#9CA3AF" font-family="sans-serif">'+l+'</text>'});
+            dados.forEach(function(x,i){
+                if(i%2===0)gr+='<line x1="'+(px+i*(bw/11))+'" y1="'+py+'" x2="'+(px+i*(bw/11))+'" y2="'+(py+bh)+'" stroke="#F3F4F6" stroke-width="1"/>';
+                gr+='<text x="'+(px+i*(bw/11))+'" y="'+(py+bh+14)+'" text-anchor="middle" font-size="9" fill="#9CA3AF" font-family="sans-serif">'+meses[x.m]+'</text>';
+            });
+            gr+='<path d="'+area(ptsR)+'" fill="url(#ag)"/>';
+            gr+='<path d="'+line(ptsR)+'" fill="none" stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
+            gr+='<path d="'+line(ptsD)+'" fill="none" stroke="#F87171" stroke-width="2" stroke-dasharray="4,3" stroke-linecap="round"/>';
+            [6,11].forEach(function(i){
+                gr+='<circle cx="'+ptsR[i].x+'" cy="'+ptsR[i].y+'" r="3.5" fill="#FAFAFA" stroke="#D4AF37" stroke-width="2"/>';
+            });
+            document.getElementById('grafico-linhas').innerHTML=gr;
+        };
+
+        window.controle_financeiro_transacoes=function(filtro){
+            var c=document.getElementById('lista-transacoes');
+            var e=document.getElementById('empty-transacoes');
+            var fi=document.getElementById('lista-transacoes').querySelectorAll('.t-item');
+            var vis=0;fi.forEach(function(el){
+                var ok=filtro==='todos'||el.dataset.tipo===filtro;
+                el.classList.toggle('hidden',!ok);if(ok)vis++;
+            });
+            e.classList.toggle('hidden',vis>0);c.classList.toggle('hidden',vis===0);
+        };
+        window.controle_financeiro_filtrar=function(f,btn){
+            document.querySelectorAll('[data-filtro]').forEach(function(b){
+                b.classList.remove('bg-marca-900','text-white');b.classList.add('bg-gray-100','text-gray-600');
+            });
+            btn.classList.remove('bg-gray-100','text-gray-600');btn.classList.add('bg-marca-900','text-white');
+            window.controle_financeiro_transacoes(f);
+        };
+        window.controle_financeiro_clientes=function(){
+            var h='';clientes.forEach(function(c){
+                var pct=((c.fat/485000)*100).toFixed(1);
+                h+='<div class="card p-4 rounded-2xl border border-gray-100 cursor-pointer" onclick="controle_financeiro_detalheCliente(\''+c.n.replace(/'/g,"\\'")+'\',\''+num(c.fat)+'\','+c.q+')">';
+                h+='<div class="flex items-center justify-between mb-2"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm" style="background:'+corAvatar(c.n)+'">'+c.n.split(' ').map(function(w){return w[0]}).join('').substring(0,2)+'</div><div><p class="font-display font-semibold text-sm text-marca-900">'+c.n+'</p><p class="text-xs text-gray-500">'+c.q+' fretes no período</p></div></div><div class="text-right"><p class="font-display font-bold text-sm text-marca-900">R$ '+num(c.fat)+'</p><div class="flex items-center gap-1 justify-end mt-0.5"><div class="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div class="h-full rounded-full bg-marca-500" style="width:'+pct+'%"></div></div><span class="text-[10px] text-gray-400">'+pct+'%</span></div></div></div></div></div>';
+            });
+            document.getElementById('lista-clientes').innerHTML=h;
+        };
+        window.controle_financeiro_detalheCliente=function(nome,fat,q){
+            abrirModal('<div class="space-y-4"><div class="flex items-center gap-3 pb-4 border-b border-gray-100"><div class="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold" style="background:'+corAvatar(nome)+'">'+nome.split(' ').map(function(w){return w[0]}).join('').substring(0,2)+'</div><div><p class="font-display font-bold text-lg text-marca-900">'+nome+'</p><p class="text-sm text-gray-500">'+q+' fretes realizados</p></div></div><div class="grid grid-cols-2 gap-3"><div class="bg-marca-400/5 rounded-xl p-3"><p class="text-xs text-gray-500 mb-1">Faturamento Total</p><p class="font-display font-bold text-lg text-marca-900">R$ '+fat+'</p></div><div class="bg-marca-400/5 rounded-xl p-3"><p class="text-xs text-gray-500 mb-1">Ticket Médio</p><p class="font-display font-bold text-lg text-marca-900">R$ '+num(parseInt(fat.replace(/\./g,'').replace(',','.'))/q)+'</p></div></div><div class="bg-gray-50 rounded-xl p-4"><p class="text-xs text-gray-500 mb-2">Fretes Recentes</p>'+[['2847','SP → RJ','R$ 18.500','pago'],['2845','MG → ES','R$ 12.300','pago'],['2843','RJ → BA','R$ 24.800','pago'],['2840','PR → SC','R$ 9.800','pendente']].map(function(f){return'<div class="flex items-center justify-between py-2 border-b border-gray-200 last:border-0"><div><p class="text-sm font-medium text-marca-900">#'+f[0]+' — '+f[1]+'</p></div><div class="text-right"><p class="text-sm font-semibold text-marca-900">'+f[2]+'</p><span class="text-[10px] px-2 py-0.5 rounded-full '+(f[3]==='pago'?'bg-emerald-50 text-emerald-600':'bg-amber-50 text-amber-600')+'">'+f[3]+'</span></div></div>'}).join('')+'</div><button onclick="fecharModal();toast(\'Relatório enviado por e-mail\',\'ok\')" class="btn w-full bg-marca-900 text-white font-display font-bold py-3 rounded-2xl mt-2">Enviar Relatório por E-mail</button></div>','Detalhes — '+nome);
+        };
+        window.controle_financeiro_motoristas=function(){
+            var h='';motoristas.forEach(function(m){
+                h+='<div class="card p-4 rounded-2xl border border-gray-100 cursor-pointer" onclick="controle_financeiro_detalheMotorista(\''+m.n.replace(/'/g,"\\'")+'\',\''+m.v.replace(/'/g,"\\'")+'\','+m.com+','+m.viagens+')">';
+                h+='<div class="flex items-center justify-between"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm" style="background:'+corAvatar(m.n)+'">'+m.n.split(' ').map(function(w){return w[0]}).join('').substring(0,2)+'</div><div><p class="font-display font-semibold text-sm text-marca-900">'+m.n+'</p><p class="text-xs text-gray-500">'+m.v+'</p></div></div><div class="text-right"><p class="font-display font-bold text-sm text-marca-900">R$ '+num(m.com)+'</p><p class="text-[10px] text-gray-400">'+m.viagens+' viagens</p></div></div></div>';
+            });
+            document.getElementById('lista-motoristas').innerHTML=h;
+        };
+        window.controle_financeiro_detalheMotorista=function(nome,v,com,vj){
+            abrirModal('<div class="space-y-4"><div class="flex items-center gap-3 pb-4 border-b border-gray-100"><div class="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold" style="background:'+corAvatar(nome)+'">'+nome.split(' ').map(function(w){return w[0]}).join('').substring(0,2)+'</div><div><p class="font-display font-bold text-lg text-marca-900">'+nome+'</p><p class="text-sm text-gray-500">'+v+'</p></div></div><div class="grid grid-cols-2 gap-3"><div class="bg-marca-400/5 rounded-xl p-3"><p class="text-xs text-gray-500 mb-1">Comissão Total</p><p class="font-display font-bold text-lg text-marca-900">R$ '+num(com)+'</p></div><div class="bg-marca-400/5 rounded-xl p-3"><p class="text-xs text-gray-500 mb-1">Viagens</p><p class="font-display font-bold text-lg text-marca-900">'+vj+'</p></div></div><div class="bg-gray-50 rounded-xl p-4"><p class="text-xs text-gray-500 mb-2">Viagens Recentes</p>'+[['4471','SP → RJ','R$ 2.800','15/01'],['4468','RJ → ES','R$ 1.950','14/01'],['4465','MG → SP','R$ 3.200','12/01'],['4460','ES → BA','R$ 1.600','10/01']].map(function(v){return'<div class="flex items-center justify-between py-2 border-b border-gray-200 last:border-0"><div><p class="text-sm font-medium text-marca-900">#'+v[0]+' — '+v[1]+'</p><p class="text-xs text-gray-400">'+v[3]+'</p></div><p class="text-sm font-semibold text-marca-900">'+v[2]+'</p></div>'}).join('')+'</div><button onclick="fecharModal();toast(\'Comprovante enviado para o motorista\',\'ok\')" class="btn w-full bg-marca-900 text-white font-display font-bold py-3 rounded-2xl mt-2">Pagar Comissão</button></div>','Detalhes — '+nome);
+        };
+        window.controle_financeiro_abrirExportar=function(){document.getElementById('modal-exportar').classList.remove('hidden')};
+        window.controle_financeiro_exportar=function(){
+            var p=document.getElementById('exp-periodo').value;
+            var t=document.getElementById('exp-tipo').value;
+            fecharModal();toast('Relatório "'+t+'" de '+p+' gerado com sucesso!','ok');
+        };
+
+        var _init=false;
+        var obs=new MutationObserver(function(){if(!document.querySelector('[data-tela="controle-financeiro"]').classList.contains('hidden')&&!_init){_init=true;init()}});
+        obs.observe(document.querySelector('[data-tela="controle-financeiro"]'),{attributes:true,attributeFilter:['class']});
+
+        function init(){
+            var sc={k:'#0A0A0A',g:'#D4AF37',r:'#F87171',bg:'#FAFAFA',fg:'#6B7280',gr:'#F3F4F6',bd:'#E5E7EB'};
+            fkpi('kpi-faturamento',kpis.faturamento,'↑','var('+kpis.varFat+'%)','text-emerald-600');
+            fkpi('val-despesas',kpis.despesas,'↑','var('+kpis.varDesp+'%)','text-red-500');
+            fkpi('val-comissoes',kpis.comissoes,'↓','var('+kpis.varCom+'%)','text-blue-600');
+            fkpi('val-lucro',kpis.lucro,'↑','var('+kpis.varLuc+'%)','text-emerald-600');
+            window.controle_financeiro_grafico();
+            window.controle_financeiro_clientes();
+            window.controle_financeiro_motoristas();
+            renderTrans();
+        }
+        function renderTrans(){
+            var c=document.getElementById('lista-transacoes');
+            var h='';trans.forEach(function(t){
+                var tc=tipoCfg(t.tipo),sc=statusCfg(t.st),ac=corAvatar(t.cli);
+                var ini=t.cli.split(' ').map(function(w){return w[0]}).join('').substring(0,2);
+                h+='<div class="t-item card p-3.5 rounded-2xl border border-gray-100 flex items-center gap-3.5 cursor-pointer active:scale-[0.98] transition-all" data-tipo="'+t.tipo+'" onclick="abrirModal(\'<div class=\'space-y-4\'><div class=\'flex items-center gap-3 pb-4 border-b border-gray-100\'><div class=\'w-11 h-11 rounded-full flex items-center justify-center text-white font-bold text-sm\' style=\'background:'+ac+'\'>'+ini+'</div><div><p class=\'font-display font-bold text-marca-900\'>'+t.cli+'</p><p class=\'text-sm text-gray-500\'>'+t.desc+'</p></div></div><div class=\'bg-gray-50 rounded-xl p-4\'><div class=\'flex justify-between mb-2\'><span class=\'text-sm text-gray-500\'>Valor</span><span class=\'font-display font-bold text-marca-900\'>R$ '+num(t.val)+'</span></div><div class=\'flex justify-between mb-2\'><span class=\'text-sm text-gray-500\'>Data</span><span class=\'text-sm font-medium text-marca-900\">'+t.dia+'</span></div><div class=\'flex justify-between\'><span class=\'text-sm text-gray-500\'>Status</span><span class=\'text-xs px-2.5 py-1 rounded-full font-medium '+sc.bg+' '+sc.tx+'\'>'+sc.lb+'</span></div></div><button onclick=\'fecharModal();toast(\"Comprovante enviado\",\"ok\")\' class=\'btn w-full bg-marca-900 text-white font-display font-bold py-3 rounded-2xl\'>Enviar Comprovante</button></div>\',\'Transação #'+t.id+'\')">';
+                h+='<div class="w-10 h-10 rounded-full flex items-center justify-center text-white flex-shrink-0" style="background:'+ac+'">'+ini+'</div>';
+                h+='<div class="flex-1 min-w-0"><p class="text-sm font-medium text-marca-900 truncate">'+t.desc+'</p><p class="text-xs text-gray-400 mt-0.5">'+t.cli+'</p></div>';
+                h+='<div class="text-right flex-shrink-0"><p class="font-display font-bold text-sm text-marca-900">R$ '+num(t.val)+'</p><div class="flex items-center gap-1.5 justify-end mt-1"><span class="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full font-medium '+tc.bg+' '+tc.tx+'">'+tipoIcon(t.tipo)+tc.lb+'</span></div></div></div></div>';
+            });
+            c.innerHTML=h;
+            document.getElementById('empty-transacoes').classList.add('hidden');
+            c.classList.remove('hidden');
+        }
+    })();
+    </script>
+</section>
+
     <!-- TELAS -->
     </main>
 
