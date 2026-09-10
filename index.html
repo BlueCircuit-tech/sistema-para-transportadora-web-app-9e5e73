@@ -2047,6 +2047,505 @@ function detalhe_do_pedido_ligarMotorista() {
     </script>
 </section>
 
+    <section data-tela="motoristas" class="hidden">
+    <div class="px-5 pt-6 pb-2">
+        <!-- Cabeçalho da tela -->
+        <div class="flex items-center justify-between mb-1">
+            <div>
+                <h1 class="text-2xl font-display font-bold text-neutral-900 tracking-tight">Motoristas</h1>
+                <p class="text-sm text-neutral-500 mt-0.5 font-body">Gestão da equipe de motoristas</p>
+            </div>
+            <button onclick="motoristas_novo()" class="flex items-center gap-2 bg-marca-900 text-white pl-3 pr-4 py-2.5 rounded-xl text-sm font-semibold font-body active:scale-95 transition-all duration-150 hover:bg-marca-800 shadow-lg shadow-marca-900/20">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 4v16m8-8H4"/></svg>
+                Novo
+            </button>
+        </div>
+
+        <!-- Cards resumo -->
+        <div class="grid grid-cols-3 gap-3 mt-5 mb-5">
+            <div class="bg-white rounded-2xl p-3.5 border border-neutral-100 shadow-sm">
+                <div class="flex items-center gap-1.5 mb-2">
+                    <div class="w-8 h-8 rounded-lg bg-marca-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-marca-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87M12 11a4 4 0 100-8 4 4 0 000 8z"/></svg>
+                    </div>
+                    <span class="text-[11px] text-neutral-400 font-body font-medium uppercase tracking-wide">Total</span>
+                </div>
+                <p class="text-2xl font-display font-bold text-neutral-900" id="res-total">15</p>
+            </div>
+            <div class="bg-white rounded-2xl p-3.5 border border-neutral-100 shadow-sm">
+                <div class="flex items-center gap-1.5 mb-2">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <span class="text-[11px] text-neutral-400 font-body font-medium uppercase tracking-wide">Ativos</span>
+                </div>
+                <p class="text-2xl font-display font-bold text-neutral-900" id="res-ativos">11</p>
+            </div>
+            <div class="bg-white rounded-2xl p-3.5 border border-neutral-100 shadow-sm">
+                <div class="flex items-center gap-1.5 mb-2">
+                    <div class="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    </div>
+                    <span class="text-[11px] text-neutral-400 font-body font-medium uppercase tracking-wide">Em Rota</span>
+                </div>
+                <p class="text-2xl font-display font-bold text-neutral-900" id="res-rota">8</p>
+            </div>
+        </div>
+
+        <!-- Busca e filtros -->
+        <div class="flex gap-2.5 mb-4">
+            <div class="flex-1 relative">
+                <svg class="w-4.5 h-4.5 text-neutral-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
+                <input type="text" id="busca-motorista" placeholder="Buscar por nome..."
+                    oninput="motoristas_filtrar()"
+                    class="w-full pl-10 pr-4 py-3 rounded-xl border border-neutral-200 text-sm font-body text-neutral-900 placeholder:text-neutral-400 bg-white focus:outline-none focus:ring-2 focus:ring-marca-900/10 focus:border-marca-900/30 transition-all">
+            </div>
+            <div class="relative">
+                <select id="filtro-status" onchange="motoristas_filtrar()" class="appearance-none pl-4 pr-9 py-3 rounded-xl border border-neutral-200 text-sm font-body text-neutral-700 bg-white focus:outline-none focus:ring-2 focus:ring-marca-900/10 focus:border-marca-900/30 transition-all cursor-pointer">
+                    <option value="todos">Todos</option>
+                    <option value="disponivel">Disponível</option>
+                    <option value="rota">Em Rota</option>
+                    <option value="offline">Offline</option>
+                </select>
+                <svg class="w-4 h-4 text-neutral-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+        </div>
+
+        <!-- Lista de motoristas -->
+        <div id="lista-motoristas" class="space-y-3 pb-6">
+        </div>
+
+        <!-- Estado vazio -->
+        <div id="estado-vazio" class="hidden pb-8">
+            <div class="flex flex-col items-center justify-center pt-12 text-center">
+                <div class="w-16 h-16 rounded-full bg-neutral-100 flex items-center justify-center mb-4">
+                    <svg class="w-8 h-8 text-neutral-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-3.4-5.745 4.125 4.125 0 00-3.4 5.745 9.337 9.337 0 00-4.121.952 9.38 9.38 0 01-2.625-.372M15 19.128v.003M15 19.128a48.207 48.207 0 01-6.364.403m-3.682.403a48.186 48.186 0 01-3.682.403M15 19.128a47.94 47.94 0 01-3.682-.403M12 11.25V4.5m0 6.75L9 8.25m3 2.25L15 11.25m-3-2.25V4.5"/></svg>
+                </div>
+                <p class="text-neutral-600 font-body font-medium text-sm">Nenhum motorista encontrado</p>
+                <p class="text-neutral-400 font-body text-xs mt-1">Tente ajustar os filtros de busca</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal detalhes do motorista -->
+    <div id="modal-motorista-overlay" class="fixed inset-0 bg-black/50 z-50 hidden items-end sm:items-center justify-center p-0 sm:p-4" onclick="if(event.target===this)fecharModal()">
+        <div id="modal-motorista-content" class="bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto animate-slide-up">
+        </div>
+    </div>
+</section>
+
+<script>
+const motoristas_dados = [
+    { id: 1, nome: 'Carlos Eduardo Silva', cnh: '12345678901', cnhCategoria: 'E', veiculo: 'Volvo FH 540', placa: 'BRA-2E19', status: 'rota', entregas: 47, avaliacao: 4.8, pontualidade: 96, telefone: '(11) 98765-4321', cnhValidade: '2027-03-15', endereco: 'Rua das Palmeiras, 234 - Guarulhos/SP', admissao: '2022-06-10', cnh: '12345678901', cnhCategoria: 'E', fotoIniciais: 'CS', fotoCor: 'bg-blue-600', obs: 'Motorista veterano, preferência por rotas sul.' },
+    { id: 2, nome: 'Antônio Ferreira Lima', cnh: '98765432100', cnhCategoria: 'E', veiculo: 'Scania R450', placa: 'BRA-1A34', status: 'disponivel', entregas: 52, avaliacao: 4.5, pontualidade: 93, telefone: '(11) 97654-3210', cnhValidade: '2026-09-22', endereco: 'Av. dos Caminhoneiros, 890 - São Paulo/SP', admissao: '2021-01-15', fotoIniciais: 'AF', fotoCor: 'bg-emerald-600', obs: 'Disponível para viagens interestaduais.' },
+    { id: 3, nome: 'Roberto Almeida Souza', cnh: '45678912345', cnhCategoria: 'D', veiculo: 'Mercedes-Benz Actros', placa: 'BRA-3F56', status: 'rota', entregas: 38, avaliacao: 4.6, pontualidade: 91, telefone: '(11) 96543-2109', cnhValidade: '2027-11-03', endereco: 'Rua Joaquim Nabuco, 45 - Osasco/SP', admissao: '2023-03-20', fotoIniciais: 'RA', fotoCor: 'bg-violet-600', obs: 'Especialista em carga refrigerada.' },
+    { id: 4, nome: 'Fernando dos Santos', cnh: '32165498700', cnhCategoria: 'E', veiculo: 'Volvo FH 460', placa: 'BRA-4B78', status: 'disponivel', entregas: 41, avaliacao: 4.3, pontualidade: 88, telefone: '(11) 95432-1098', cnhValidade: '2028-01-30', endereco: 'Rua das Indústrias, 567 - Barueri/SP', admissao: '2022-09-05', fotoIniciais: 'FS', fotoCor: 'bg-orange-600', obs: '' },
+    { id: 5, nome: 'José Marcos Pereira', cnh: '65432198700', cnhCategoria: 'E', veiculo: 'Iveco Hi-Way', placa: 'BRA-5C90', status: 'offline', entregas: 29, avaliacao: 4.1, pontualidade: 85, telefone: '(11) 94321-0987', cnhValidade: '2026-06-14', endereco: 'Estrada Velha de Campinas, 1200 - Jundiaí/SP', admissao: '2023-08-12', fotoIniciais: 'JP', fotoCor: 'bg-rose-600', obs: 'Em período de descanso semanal.' },
+    { id: 6, nome: 'Paulo Henrique Costa', cnh: '78912345600', cnhCategoria: 'D', veiculo: 'Ford Cargo 2428', placa: 'BRA-6D12', status: 'rota', entregas: 33, avaliacao: 4.4, pontualidade: 90, telefone: '(11) 93210-9876', cnhValidade: '2027-07-25', endereco: 'Rua Amazonas, 78 - São Bernardo/SP', admissao: '2024-01-08', fotoIniciais: 'PH', fotoCor: 'bg-teal-600', obs: 'Rotas curtas e médias.' },
+    { id: 7, nome: 'Marcelo Ribeiro Oliveira', cnh: '14725836900', cnhCategoria: 'E', veiculo: 'Volvo FH 540', placa: 'BRA-7E45', status: 'disponivel', entregas: 44, avaliacao: 4.7, pontualidade: 95, telefone: '(11) 92109-8765', cnhValidade: '2028-05-18', endereco: 'Rua Paraná, 321 - Santo André/SP', admissao: '2021-11-22', fotoIniciais: 'MR', fotoCor: 'bg-indigo-600', obs: 'Coordenador de equipe de motoristas.' },
+    { id: 8, nome: 'Ricardo Moura Dias', cnh: '36925814700', cnhCategoria: 'E', veiculo: 'Scania R500', placa: 'BRA-8G67', status: 'offline', entregas: 25, avaliacao: 3.9, pontualidade: 82, telefone: '(11) 91098-7654', cnhValidade: '2026-12-01', endereco: 'Rua Bahia, 654 - Diadema/SP', admissao: '2023-11-30', fotoIniciais: 'RM', fotoCor: 'bg-slate-600', obs: 'Aguardando renovação de habilitação.' },
+    { id: 9, nome: 'André Luiz Barbosa', cnh: '25814736900', cnhCategoria: 'D', veiculo: 'Mercedes-Benz Atego', placa: 'BRA-9H89', status: 'rota', entregas: 36, avaliacao: 4.2, pontualidade: 89, telefone: '(11) 90987-6543', cnhValidade: '2027-08-09', endereco: 'Rua Minas Gerais, 987 - Mauá/SP', admissao: '2022-04-18', fotoIniciais: 'AB', fotoCor: 'bg-cyan-600', obs: '' },
+    { id: 10, nome: 'Eduardo Nascimento', cnh: '74185296300', cnhCategoria: 'E', veiculo: 'Volvo FH 460', placa: 'BRA-0J01', status: 'disponivel', entregas: 40, avaliacao: 4.5, pontualidade: 92, telefone: '(11) 89876-5432', cnhValidade: '2028-02-14', endereco: 'Rua Goiás, 147 - Cubatão/SP', admissao: '2021-07-03', fotoIniciais: 'EN', fotoCor: 'bg-lime-600', obs: '' },
+    { id: 11, nome: 'Tiago Cardoso Rocha', cnh: '85296374100', cnhCategoria: 'E', veiculo: 'Iveco Hi-Way', placa: 'BRA-1K23', status: 'rota', entregas: 31, avaliacao: 4.0, pontualidade: 87, telefone: '(11) 88765-4321', cnhValidade: '2026-10-05', endereco: 'Rua Rio Grande do Sul, 258 - Santos/SP', admissao: '2023-06-14', fotoIniciais: 'TC', fotoCor: 'bg-fuchsia-600', obs: 'Cargas perigosas - certificado atualizado.' },
+    { id: 12, nome: 'Bruno Augusto Pinto', cnh: '96374185200', cnhCategoria: 'D', veiculo: 'Ford Cargo 2428', placa: 'BRA-2L45', status: 'offline', entregas: 22, avaliacao: 3.8, pontualidade: 80, telefone: '(11) 87654-3210', cnhValidade: '2026-08-20', endereco: 'Rua Pernambuco, 369 - São Vicente/SP', admissao: '2024-05-01', fotoIniciais: 'BP', fotoCor: 'bg-red-600', obs: 'Férias — retorna dia 20/01.' },
+    { id: 13, nome: 'Leandro Vieira Matos', cnh: '15975348600', cnhCategoria: 'E', veiculo: 'Scania R450', placa: 'BRA-3M67', status: 'disponivel', entregas: 48, avaliacao: 4.9, pontualidade: 98, telefone: '(11) 86543-2109', cnhValidade: '2028-09-11', endereco: 'Rua Espírito Santo, 741 - Praia Grande/SP', admissao: '2020-12-01', fotoIniciais: 'LV', fotoCor: 'bg-amber-700', obs: 'Motorista destaque do mês.' },
+    { id: 14, nome: 'Vinícius Gomes Lopes', cnh: '75395148600', cnhCategoria: 'E', veiculo: 'Mercedes-Benz Actros', placa: 'BRA-4N89', status: 'rota', entregas: 35, avaliacao: 4.3, pontualidade: 90, telefone: '(11) 85432-1098', cnhValidade: '2027-12-28', endereco: 'Rua Alagoas, 159 - Guarujá/SP', admissao: '2022-11-08', fotoIniciais: 'VG', fotoCor: 'bg-sky-600', obs: '' },
+    { id: 15, nome: 'Fábio Reis Tavares', cnh: '95175348600', cnhCategoria: 'D', veiculo: 'Mercedes-Benz Atego', placa: 'BRA-5P01', status: 'offline', entregas: 19, avaliacao: 3.7, pontualidade: 78, telefone: '(11) 84321-0987', cnhValidade: '2026-04-15', endereco: 'Rua Piauí, 852 - Franco da Rocha/SP', admissao: '2024-09-16', fotoIniciais: 'FR', fotoCor: 'bg-neutral-500', obs: 'Em processo de avaliação periódica.' }
+];
+
+function motoristas_render(dados) {
+    const container = document.getElementById('lista-motoristas');
+    const vazio = document.getElementById('estado-vazio');
+
+    if (dados.length === 0) {
+        container.innerHTML = '';
+        vazio.classList.remove('hidden');
+        return;
+    }
+    vazio.classList.add('hidden');
+
+    container.innerHTML = dados.map(m => {
+        const statusMap = {
+            'disponivel': { label: 'Disponível', cor: 'bg-emerald-100 text-emerald-700', dot: 'bg-emerald-500' },
+            'rota': { label: 'Em Rota', cor: 'bg-amber-100 text-amber-700', dot: 'bg-amber-500' },
+            'offline': { label: 'Offline', cor: 'bg-neutral-100 text-neutral-500', dot: 'bg-neutral-400' }
+        };
+        const st = statusMap[m.status] || statusMap['offline'];
+        const estrelas = Array.from({length: 5}, (_, i) =>
+            i < Math.floor(m.avaliacao)
+                ? '<svg class="w-3.5 h-3.5 text-marca-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>'
+                : (i < m.avaliacao ? '<svg class="w-3.5 h-3.5 text-marca-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>' : '<svg class="w-3.5 h-3.5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>')
+        ).join('');
+
+        return `
+        <div class="card bg-white rounded-2xl border border-neutral-100 shadow-sm overflow-hidden cursor-pointer active:scale-[0.98] transition-all duration-150" onclick="motoristas_detalhe(${m.id})">
+            <div class="p-4">
+                <div class="flex gap-3.5">
+                    <!-- Avatar -->
+                    <div class="flex-shrink-0">
+                        <div class="w-14 h-14 rounded-xl ${m.fotoCor} flex items-center justify-center text-white font-display font-bold text-lg shadow-md">
+                            ${m.fotoIniciais}
+                        </div>
+                    </div>
+                    <!-- Info principal -->
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-start justify-between gap-2">
+                            <div>
+                                <h3 class="font-display font-bold text-neutral-900 text-[15px] leading-tight truncate">${m.nome}</h3>
+                                <p class="text-xs text-neutral-500 font-body mt-0.5">CNH: ${m.cnhCategoria} • ${m.cnh.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')}</p>
+                            </div>
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold font-body ${st.cor} flex-shrink-0">
+                                <span class="w-1.5 h-1.5 rounded-full ${st.dot}"></span>
+                                ${st.label}
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-1.5 mt-2 text-xs text-neutral-500 font-body">
+                            <svg class="w-3.5 h-3.5 text-neutral-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                            <span class="truncate">${m.veiculo} • ${m.placa}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Indicadores de performance -->
+                <div class="grid grid-cols-3 gap-2.5 mt-3.5 pt-3.5 border-t border-neutral-100">
+                    <div class="text-center">
+                        <p class="text-[11px] text-neutral-400 font-body mb-0.5">Entregas/mês</p>
+                        <p class="text-sm font-display font-bold text-neutral-900">${m.entregas}</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-[11px] text-neutral-400 font-body mb-0.5">Avaliação</p>
+                        <div class="flex items-center justify-center gap-0.5">
+                            <span class="text-sm font-display font-bold text-neutral-900 mr-0.5">${m.avaliacao}</span>
+                            <div class="flex gap-px">${estrelas}</div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-[11px] text-neutral-400 font-body mb-0.5">Pontualidade</p>
+                        <div class="flex items-center justify-center gap-1.5">
+                            <span class="text-sm font-display font-bold text-neutral-900">${m.pontualidade}%</span>
+                            <div class="w-10 h-1.5 bg-neutral-200 rounded-full overflow-hidden">
+                                <div class="h-full rounded-full ${m.pontualidade >= 90 ? 'bg-emerald-500' : m.pontualidade >= 80 ? 'bg-amber-500' : 'bg-red-500'}" style="width:${m.pontualidade}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ações -->
+                <div class="flex gap-2 mt-3.5 pt-3 border-t border-neutral-100">
+                    <button onclick="event.stopPropagation(); motoristas_atribuir(${m.id})" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-semibold font-body bg-marca-900 text-white active:scale-95 transition-all duration-150 hover:bg-marca-800">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                        Atribuir Entrega
+                    </button>
+                    <button onclick="event.stopPropagation(); motoristas_editar(${m.id})" class="flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold font-body border border-neutral-200 text-neutral-600 active:scale-95 transition-all duration-150 hover:bg-neutral-50">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                        Editar
+                    </button>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function motoristas_filtrar() {
+    const termo = document.getElementById('busca-motorista').value.toLowerCase().trim();
+    const filtro = document.getElementById('filtro-status').value;
+
+    const filtrados = motoristas_dados.filter(m => {
+        const matchNome = !termo || m.nome.toLowerCase().includes(termo) || m.veiculo.toLowerCase().includes(termo);
+        const matchStatus = filtro === 'todos' || m.status === filtro;
+        return matchNome && matchStatus;
+    });
+
+    motoristas_render(filtrados);
+
+    const total = motoristas_dados.length;
+    const ativos = motoristas_dados.filter(m => m.status !== 'offline').length;
+    const emRota = motoristas_dados.filter(m => m.status === 'rota').length;
+    document.getElementById('res-total').textContent = total;
+    document.getElementById('res-ativos').textContent = ativos;
+    document.getElementById('res-rota').textContent = emRota;
+}
+
+function motoristas_statusLabel(status) {
+    const map = {
+        'disponivel': { label: 'Disponível', cor: 'bg-emerald-100 text-emerald-700', dot: 'bg-emerald-500' },
+        'rota': { label: 'Em Rota', cor: 'bg-amber-100 text-amber-700', dot: 'bg-amber-500' },
+        'offline': { label: 'Offline', cor: 'bg-neutral-100 text-neutral-500', dot: 'bg-neutral-400' }
+    };
+    return map[status] || map['offline'];
+}
+
+function motoristas_detalhe(id) {
+    const m = motoristas_dados.find(x => x.id === id);
+    if (!m) return;
+    const st = motoristas_statusLabel(m.status);
+    const estrelas = Array.from({length: 5}, (_, i) =>
+        i < Math.floor(m.avaliacao)
+            ? '<svg class="w-5 h-5 text-marca-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>'
+            : '<svg class="w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>'
+    ).join('');
+
+    const html = `
+        <div class="p-5">
+            <!-- Header modal -->
+            <div class="flex items-center justify-between mb-5">
+                <h2 class="text-lg font-display font-bold text-neutral-900">Detalhes do Motorista</h2>
+                <button onclick="fecharModal()" class="w-8 h-8 rounded-lg flex items-center justify-center text-neutral-400 hover:bg-neutral-100 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <!-- Avatar e nome -->
+            <div class="flex items-center gap-4 mb-5">
+                <div class="w-16 h-16 rounded-2xl ${m.fotoCor} flex items-center justify-center text-white font-display font-bold text-xl shadow-lg flex-shrink-0">
+                    ${m.fotoIniciais}
+                </div>
+                <div class="min-w-0">
+                    <h3 class="font-display font-bold text-neutral-900 text-lg leading-tight">${m.nome}</h3>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold font-body ${st.cor} mt-1">
+                        <span class="w-1.5 h-1.5 rounded-full ${st.dot}"></span>
+                        ${st.label}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Indicadores rápidos -->
+            <div class="grid grid-cols-3 gap-2.5 mb-5">
+                <div class="bg-neutral-50 rounded-xl p-3 text-center">
+                    <p class="text-[10px] text-neutral-400 font-body uppercase tracking-wide mb-1">Entregas</p>
+                    <p class="text-lg font-display font-bold text-neutral-900">${m.entregas}</p>
+                </div>
+                <div class="bg-neutral-50 rounded-xl p-3 text-center">
+                    <p class="text-[10px] text-neutral-400 font-body uppercase tracking-wide mb-1">Avaliação</p>
+                    <div class="flex items-center justify-center gap-0.5">
+                        <span class="text-sm font-display font-bold text-neutral-900 mr-1">${m.avaliacao}</span>
+                        <div class="flex">${estrelas}</div>
+                    </div>
+                </div>
+                <div class="bg-neutral-50 rounded-xl p-3 text-center">
+                    <p class="text-[10px] text-neutral-400 font-body uppercase tracking-wide mb-1">Pontualidade</p>
+                    <p class="text-lg font-display font-bold text-neutral-900">${m.pontualidade}%</p>
+                </div>
+            </div>
+
+            <!-- Dados detalhados -->
+            <div class="space-y-3 mb-5">
+                <div class="flex items-start gap-3 p-3 bg-neutral-50 rounded-xl">
+                    <svg class="w-5 h-5 text-neutral-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 013 21V12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"/></svg>
+                    <div class="min-w-0">
+                        <p class="text-[11px] text-neutral-400 font-body">CNH</p>
+                        <p class="text-sm font-body font-medium text-neutral-900">${m.cnhCategoria} - ${m.cnh.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')} <span class="text-neutral-400">• Válida até ${dataBR(m.cnhValidade)}</span></p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 p-3 bg-neutral-50 rounded-xl">
+                    <svg class="w-5 h-5 text-neutral-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-1.5m-6 0H6.375c-.621 0-1.125.504-1.125 1.125v5.25c0 .621.504 1.125 1.125 1.125h1.5m6 0h1.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-1.5"/></svg>
+                    <div class="min-w-0">
+                        <p class="text-[11px] text-neutral-400 font-body">Veículo</p>
+                        <p class="text-sm font-body font-medium text-neutral-900">${m.veiculo} <span class="text-neutral-400 font-normal">• ${m.placa}</span></p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 p-3 bg-neutral-50 rounded-xl">
+                    <svg class="w-5 h-5 text-neutral-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.04 12.04 0 01-7.143-7.143c-.162-.441.004-.928.38-1.211l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+                    <div class="min-w-0">
+                        <p class="text-[11px] text-neutral-400 font-body">Telefone</p>
+                        <p class="text-sm font-body font-medium text-neutral-900">${m.telefone}</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 p-3 bg-neutral-50 rounded-xl">
+                    <svg class="w-5 h-5 text-neutral-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+                    <div class="min-w-0">
+                        <p class="text-[11px] text-neutral-400 font-body">Endereço</p>
+                        <p class="text-sm font-body font-medium text-neutral-900">${m.endereco}</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 p-3 bg-neutral-50 rounded-xl">
+                    <svg class="w-5 h-5 text-neutral-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+                    <div class="min-w-0">
+                        <p class="text-[11px] text-neutral-400 font-body">Admissão</p>
+                        <p class="text-sm font-body font-medium text-neutral-900">${dataBR(m.admissao)}</p>
+                    </div>
+                </div>
+                ${m.obs ? `
+                <div class="flex items-start gap-3 p-3 bg-amber-50 rounded-xl border border-amber-200">
+                    <svg class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+                    <div>
+                        <p class="text-[11px] text-amber-600 font-body font-medium">Observação</p>
+                        <p class="text-sm font-body text-neutral-700">${m.obs}</p>
+                    </div>
+                </div>` : ''}
+            </div>
+
+            <!-- Ações do modal -->
+            <div class="flex gap-2.5">
+                <button onclick="motoristas_editar(${m.id}); fecharModal();" class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold font-body border border-neutral-200 text-neutral-700 active:scale-95 transition-all duration-150 hover:bg-neutral-50">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                    Editar Cadastro
+                </button>
+                <button onclick="motoristas_atribuir(${m.id}); fecharModal();" class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold font-body bg-marca-900 text-white active:scale-95 transition-all duration-150 hover:bg-marca-800">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                    Atribuir Entrega
+                </button>
+            </div>
+        </div>`;
+
+    abrirModal(html, 'Motorista');
+}
+
+function motoristas_atribuir(id) {
+    const m = motoristas_dados.find(x => x.id === id);
+    if (!m) return;
+    if (m.status === 'offline') {
+        toast('Motorista offline — não pode receber entrega agora.', 'erro');
+        return;
+    }
+    if (m.status === 'rota') {
+        toast('Motorista já está em rota. Libere a entrega anterior primeiro.', 'erro');
+        return;
+    }
+    mostrarTela('novo-pedido');
+    toast(`Entrega atribuída a ${m.nome.split(' ')[0]}.`, 'ok');
+}
+
+function motoristas_editar(id) {
+    const m = motoristas_dados.find(x => x.id === id);
+    if (!m) return;
+    const html = `
+        <div class="p-5">
+            <div class="flex items-center justify-between mb-5">
+                <h2 class="text-lg font-display font-bold text-neutral-900">Editar Cadastro</h2>
+                <button onclick="fecharModal()" class="w-8 h-8 rounded-lg flex items-center justify-center text-neutral-400 hover:bg-neutral-100 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-body font-medium text-neutral-600 mb-1.5">Nome Completo</label>
+                    <input type="text" value="${m.nome}" class="w-full px-4 py-3 rounded-xl border border-neutral-200 text-sm font-body text-neutral-900 bg-neutral-50" readonly>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-body font-medium text-neutral-600 mb-1.5">CNH Número</label>
+                        <input type="text" value="${m.cnh}" class="w-full px-4 py-3 rounded-xl border border-neutral-200 text-sm font-body text-neutral-900 bg-neutral-50" readonly>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-body font-medium text-neutral-600 mb-1.5">Categoria</label>
+                        <input type="text" value="${m.cnhCategoria}" class="w-full px-4 py-3 rounded-xl border border-neutral-200 text-sm font-body text-neutral-900 bg-neutral-50" readonly>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-body font-medium text-neutral-600 mb-1.5">Veículo</label>
+                    <input type="text" value="${m.veiculo}" class="w-full px-4 py-3 rounded-xl border border-neutral-200 text-sm font-body text-neutral-900 bg-neutral-50" readonly>
+                </div>
+                <div>
+                    <label class="block text-xs font-body font-medium text-neutral-600 mb-1.5">Telefone</label>
+                    <input type="text" value="${m.telefone}" class="w-full px-4 py-3 rounded-xl border border-neutral-200 text-sm font-body text-neutral-900 bg-neutral-50" readonly>
+                </div>
+                <div>
+                    <label class="block text-xs font-body font-medium text-neutral-600 mb-1.5">Validade CNH</label>
+                    <input type="text" value="${dataBR(m.cnhValidade)}" class="w-full px-4 py-3 rounded-xl border border-neutral-200 text-sm font-body text-neutral-900 bg-neutral-50" readonly>
+                </div>
+                <p class="text-xs text-neutral-400 font-body text-center pt-2">Campos somente leitura no protótipo</p>
+            </div>
+            <div class="mt-5">
+                <button onclick="fecharModal(); toast('Edição finalizada (simulação).', 'ok');" class="w-full py-3 rounded-xl text-sm font-semibold font-body bg-marca-900 text-white active:scale-95 transition-all duration-150 hover:bg-marca-800">
+                    Salvar Alterações
+                </button>
+            </div>
+        </div>`;
+    abrirModal(html, 'Editar Motorista');
+}
+
+function motoristas_novo() {
+    const html = `
+        <div class="p-5">
+            <div class="flex items-center justify-between mb-5">
+                <h2 class="text-lg font-display font-bold text-neutral-900">Novo Motorista</h2>
+                <button onclick="fecharModal()" class="w-8 h-8 rounded-lg flex items-center justify-center text-neutral-400 hover:bg-neutral-100 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-body font-medium text-neutral-600 mb-1.5">Nome Completo *</label>
+                    <input type="text" id="campo-nome" placeholder="Ex: João da Silva" class="w-full px-4 py-3 rounded-xl border border-neutral-200 text-sm font-body text-neutral-900 placeholder:text-neutral-400 bg-white focus:outline-none focus:ring-2 focus:ring-marca-900/10 focus:border-marca-900/30">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-body font-medium text-neutral-600 mb-1.5">CNH *</label>
+                        <input type="text" id="campo-cnh" placeholder="12345678901" class="w-full px-4 py-3 rounded-xl border border-neutral-200 text-sm font-body text-neutral-900 placeholder:text-neutral-400 bg-white focus:outline-none focus:ring-2 focus:ring-marca-900/10 focus:border-marca-900/30">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-body font-medium text-neutral-600 mb-1.5">Categoria</label>
+                        <select id="campo-cat" class="w-full px-4 py-3 rounded-xl border border-neutral-200 text-sm font-body text-neutral-900 bg-white focus:outline-none focus:ring-2 focus:ring-marca-900/10 focus:border-marca-900/30">
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-body font-medium text-neutral-600 mb-1.5">Veículo</label>
+                    <input type="text" id="campo-veiculo" placeholder="Ex: Volvo FH 540" class="w-full px-4 py-3 rounded-xl border border-neutral-200 text-sm font-body text-neutral-900 placeholder:text-neutral-400 bg-white focus:outline-none focus:ring-2 focus:ring-marca-900/10 focus:border-marca-900/30">
+                </div>
+                <div>
+                    <label class="block text-xs font-body font-medium text-neutral-600 mb-1.5">Telefone</label>
+                    <input type="text" id="campo-tel" placeholder="(11) 98765-4321" class="w-full px-4 py-3 rounded-xl border border-neutral-200 text-sm font-body text-neutral-900 placeholder:text-neutral-400 bg-white focus:outline-none focus:ring-2 focus:ring-marca-900/10 focus:border-marca-900/30">
+                </div>
+                <div>
+                    <label class="block text-xs font-body font-medium text-neutral-600 mb-1.5">Endereço</label>
+                    <input type="text" id="campo-end" placeholder="Rua, número, bairro, cidade/UF" class="w-full px-4 py-3 rounded-xl border border-neutral-200 text-sm font-body text-neutral-900 placeholder:text-neutral-400 bg-white focus:outline-none focus:ring-2 focus:ring-marca-900/10 focus:border-marca-900/30">
+                </div>
+                <div>
+                    <label class="block text-xs font-body font-medium text-neutral-600 mb-1.5">Validade CNH</label>
+                    <input type="date" id="campo-validade" class="w-full px-4 py-3 rounded-xl border border-neutral-200 text-sm font-body text-neutral-900 bg-white focus:outline-none focus:ring-2 focus:ring-marca-900/10 focus:border-marca-900/30">
+                </div>
+            </div>
+            <div class="mt-5 flex gap-2.5">
+                <button onclick="fecharModal()" class="flex-1 py-3 rounded-xl text-sm font-semibold font-body border border-neutral-200 text-neutral-600 active:scale-95 transition-all duration-150 hover:bg-neutral-50">Cancelar</button>
+                <button onclick="motoristas_salvar()" class="flex-1 py-3 rounded-xl text-sm font-semibold font-body bg-marca-900 text-white active:scale-95 transition-all duration-150 hover:bg-marca-800">Cadastrar</button>
+            </div>
+        </div>`;
+    abrirModal(html, 'Novo Motorista');
+}
+
+function motoristas_salvar() {
+    const nome = document.getElementById('campo-nome').value.trim();
+    const cnh = document.getElementById('campo-cnh').value.trim();
+    const veiculo = document.getElementById('campo-veiculo').value.trim();
+    if (!nome || !cnh) {
+        toast('Preencha nome e CNH para continuar.', 'erro');
+        return;
+    }
+    const inicial = nome.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    const cores = ['bg-blue-600','bg-emerald-600','bg-violet-600','bg-orange-600','bg-teal-600','bg-indigo-600','bg-amber-700','bg-sky-600','bg-lime-600','bg-fuchsia-600'];
+    const novo = {
+        id: Date.now(),
+        nome: nome,
+        cnh: cnh,
+        cnhCategoria: document.getElementById('campo-cat').value || 'E',
+        veiculo: veiculo || 'Não atribuído',
+        placa: '---',
+        status: 'disponivel',
+        entregas: 0,
+        avaliacao: 0,
+        pontualidade: 0,
+        telefone: document.getElementById('campo-tel').value || '---',
+        cnhValidade: document.getElementById('campo-validade').value || '2028-01-01',
+        endereco: document.getElementById('campo-end').value || '---',
+        admissao: new Date().toISOString().slice(0, 10),
+        fotoIniciais: inicial,
+        fotoCor: cores[Math.floor(Math.random() * cores.length)],
+        obs: ''
+    };
+    motoristas_dados.unshift(novo);
+    fecharModal();
+    motoristas_filtrar();
+    toast(`${nome} cadastrado com sucesso!`, 'ok');
+}
+
+// Inicializa a lista
+motoristas_render(motoristas_dados);
+</script>
+
     <!-- TELAS -->
     </main>
 
