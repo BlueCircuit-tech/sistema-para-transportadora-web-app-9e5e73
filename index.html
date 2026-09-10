@@ -2923,6 +2923,519 @@ motoristas_render(motoristas_dados);
     </script>
 </section>
 
+    <section data-tela="entregas-do-dia" class="hidden">
+      <div class="px-4 pt-4 pb-2">
+        <div class="flex items-start justify-between mb-1">
+          <div>
+            <p class="text-xs text-gray-500 font-body">Quarta-feira, 15 de Julho</p>
+            <h1 class="text-xl font-display font-bold text-marca-900 mt-0.5">Entregas do Dia</h1>
+          </div>
+          <div class="flex items-center gap-1.5 bg-green-50 text-green-700 px-2.5 py-1 rounded-full">
+            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+            <span class="text-xs font-medium">4 pendentes</span>
+          </div>
+        </div>
+        <p class="text-xs text-gray-400 font-body mt-1">Rota Zona Sul · Veículo ABC-1234</p>
+      </div>
+
+      <div class="px-4 mt-3">
+        <div class="bg-marca-900 rounded-2xl p-4 text-white relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-marca-500 opacity-10 rounded-full -translate-y-8 translate-x-8"></div>
+          <div class="relative z-10">
+            <div class="flex items-center gap-2 mb-3">
+              <svg class="w-4 h-4 text-marca-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="1.5" fill="currentColor" stroke="none"/></svg>
+              <span class="text-xs text-gray-300 font-body">Próxima Parada</span>
+            </div>
+            <p class="font-display font-bold text-sm" id="proxima-parada-nome">Distribuidora Norte</p>
+            <p class="text-xs text-gray-400 mt-0.5" id="proxima-parada-endereco">Av. Brasil, 4500 - Bonsucesso</p>
+            <div class="flex items-center justify-between mt-3">
+              <div class="flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-marca-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span class="text-sm font-medium" id="proxima-eta">Chegada em 28 min</span>
+              </div>
+              <div class="text-right">
+                <span class="text-xs text-gray-400">Distância</span>
+                <p class="text-sm font-medium text-marca-500" id="proxima-distancia">7,2 km</p>
+              </div>
+            </div>
+            <div class="mt-3 h-1.5 bg-gray-700 rounded-full overflow-hidden">
+              <div class="h-full bg-marca-500 rounded-full transition-all duration-1000" id="eta-progress-bar" style="width: 35%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-4 mt-4">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="flex-1 relative">
+            <svg class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input type="text" id="busca-entregas" placeholder="Buscar cliente ou número..."
+              class="w-full pl-9 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-body text-gray-700 placeholder-gray-400 focus:outline-none focus:border-marca-500 focus:ring-1 focus:ring-marca-500 transition-colors">
+          </div>
+          <button onclick="entregas_do_dia_toggleFiltro()" class="p-2.5 bg-white border border-gray-200 rounded-xl active:scale-95 transition-transform" title="Filtrar">
+            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+          </button>
+        </div>
+
+        <div id="filtro-container" class="hidden mb-3 flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+          <button onclick="entregas_do_dia_filtrar('todos')" class="filtro-btn flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium bg-marca-900 text-white transition-all" data-filtro="todos">Todos</button>
+          <button onclick="entregas_do_dia_filtrar('pendente')" class="filtro-btn flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 transition-all" data-filtro="pendente">Pendentes</button>
+          <button onclick="entregas_do_dia_filtrar('retirada')" class="filtro-btn flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 transition-all" data-filtro="retirada">Em trânsito</button>
+          <button onclick="entregas_do_dia_filtrar('concluida')" class="filtro-btn flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 transition-all" data-filtro="concluida">Concluídas</button>
+          <button onclick="entregas_do_dia_filtrar('cancelada')" class="filtro-btn flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 transition-all" data-filtro="cancelada">Canceladas</button>
+        </div>
+
+        <div id="lista-entregas-container" class="space-y-3"></div>
+
+        <div id="estado-vazio" class="hidden py-12 text-center">
+          <svg class="w-16 h-16 text-gray-200 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+          <p class="text-sm text-gray-400 font-body">Nenhuma entrega encontrada</p>
+        </div>
+      </div>
+
+      <div class="h-20"></div>
+    </section>
+
+    <script>
+    (function() {
+      const entregas = [
+        { id: 'E-2471', cliente: 'Distribuidora Norte', contato: 'Carlos Mendes', endereco: 'Av. Brasil, 4500 - Bonsucesso, Rio de Janeiro - RJ', cep: '21032-050', retirada: '06:30', entrega: '08:30', status: 'pendente', comissao: 280.00, peso: '1.200 kg', valorCarga: 4500.00, tipoCarga: 'Eletrodomésticos', obs: 'Portaria fechada após 18h. Contatar Carlos ao chegar.' },
+        { id: 'E-2472', cliente: 'Supermercado Saveiro', contato: 'Ana Paula R.', endereco: 'Rua das Laranjeiras, 180 - Laranjeiras, Rio de Janeiro - RJ', cep: '22240-005', retirada: '08:00', entrega: '09:45', status: 'retirada', comissao: 195.00, peso: '800 kg', valorCarga: 2100.00, tipoCarga: 'Gêneros alimentícios', obs: 'Carregar na doca 2. Checar nota fiscal.' },
+        { id: 'E-2473', cliente: 'Loja Materiais Silva', contato: 'Roberto Silva', endereco: 'Estrada dos Bandeirantes, 8900 - Vargem Grande, Rio de Janeiro - RJ', cep: '22785-300', retirada: '10:00', entrega: '11:30', status: 'pendente', comissao: 160.00, peso: '500 kg', valorCarga: 1200.00, tipoCarga: 'Materiais de construção', obs: 'Carga paletizada. 10 pallets.' },
+        { id: 'E-2474', cliente: 'Farmacia Saúde Total', contato: 'Dra. Fernanda', endereco: 'Av. das Américas, 1500 - Barra da Tijuca, Rio de Janeiro - RJ', cep: '22631-000', retirada: '11:00', entrega: '12:30', status: 'pendente', comissao: 145.00, peso: '350 kg', valorCarga: 980.00, tipoCarga: 'Medicamentos', obs: 'Cuidado com carga frágil. Necessita refrigeração.' },
+        { id: 'E-2475', cliente: 'Moveis Conforto', contato: 'Paulo Henrique', endereco: 'Rua Voluntários da Pátria, 420 - Santana, Rio de Janeiro - RJ', cep: '20210-000', retirada: '13:00', entrega: '14:30', status: 'pendente', comissao: 220.00, peso: '950 kg', valorCarga: 3200.00, tipoCarga: 'Móveis planejados', obs: 'Sofá 3 lugares + mesa. Cuidado ao manuseio.' },
+        { id: 'E-2476', cliente: 'Atacado Central', contato: 'Mariana Costa', endereco: 'Rod. Presidente Dutra, Km 163 - São João de Meriti - RJ', cep: '25545-000', retirada: '14:00', entrega: '15:45', status: 'pendente', comissao: 175.00, peso: '700 kg', valorCarga: 1800.00, tipoCarga: 'Produtos de limpeza', obs: 'Galpão ao lado do posto Shell. RG necessário.' },
+        { id: 'E-2477', cliente: 'Tech Parts Informática', contato: 'Lucas Oliveira', endereco: 'Rua Santa Clara, 75 - Copacabana, Rio de Janeiro - RJ', cep: '22041-010', retirada: '15:00', entrega: '16:15', status: 'pendente', comissao: 120.00, peso: '180 kg', valorCarga: 7500.00, tipoCarga: 'Equipamentos eletrônicos', obs: 'Alto valor. Acompanhar entrega pessoalmente.' },
+        { id: 'E-2478', cliente: 'Papelaria Universo', contato: 'Beatriz Souza', endereco: 'Rua Visconde de Pirajá, 350 - Ipanema, Rio de Janeiro - RJ', cep: '22410-000', retirada: '16:00', entrega: '17:00', status: 'pendente', comissao: 90.00, peso: '250 kg', valorCarga: 600.00, tipoCarga: 'Material de escritório', obs: '' }
+      ];
+
+      let filtroAtual = 'todos';
+      let buscaAtual = '';
+      let itemExpandido = null;
+      let itemCheckinAberto = null;
+
+      function entregas_do_dia_getStatusBadge(status) {
+        const map = {
+          pendente: '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-50 text-yellow-700 border border-yellow-200"><span class="w-1.5 h-1.5 bg-yellow-500 rounded-full"></span>Pendente</span>',
+          retirada: '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200"><span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>Em trânsito</span>',
+          concluida: '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-200"><span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>Entregue</span>',
+          cancelada: '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-200"><span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span>Cancelada</span>'
+        };
+        return map[status] || map.pendente;
+      }
+
+      function entregas_do_dia_getIniciais(nome) {
+        return nome.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+      }
+
+      function entregas_do_dia_getCorAvatar(nome) {
+        const cores = ['bg-amber-600', 'bg-emerald-600', 'bg-blue-600', 'bg-rose-600', 'bg-indigo-600', 'bg-teal-600', 'bg-orange-600', 'bg-cyan-600'];
+        let hash = 0;
+        for (let i = 0; i < nome.length; i++) hash = nome.charCodeAt(i) + ((hash << 5) - hash);
+        return cores[Math.abs(hash) % cores.length];
+      }
+
+      function entregas_do_dia_renderLista() {
+        const container = document.getElementById('lista-entregas-container');
+        const estadoVazio = document.getElementById('estado-vazio');
+
+        let filtradas = entregas.filter(e => {
+          const matchFiltro = filtroAtual === 'todos' || e.status === filtroAtual;
+          const termo = buscaAtual.toLowerCase();
+          const matchBusca = !termo || e.cliente.toLowerCase().includes(termo) || e.id.toLowerCase().includes(termo) || e.endereco.toLowerCase().includes(termo);
+          return matchFiltro && matchBusca;
+        });
+
+        if (filtradas.length === 0) {
+          container.innerHTML = '';
+          estadoVazio.classList.remove('hidden');
+          return;
+        }
+        estadoVazio.classList.add('hidden');
+
+        container.innerHTML = filtradas.map((e, idx) => {
+          const isConcluida = e.status === 'concluida';
+          const isCancelada = e.status === 'cancelada';
+          const isExpandido = itemExpandido === e.id;
+          const isCheckinAberto = itemCheckinAberto === e.id;
+          const corAvatar = entregas_do_dia_getCorAvatar(e.cliente);
+          const iniciais = entregas_do_dia_getIniciais(e.cliente);
+
+          let botoesAcao = '';
+          if (isConcluida) {
+            botoesAcao = '<div class="flex items-center gap-2 text-green-600 bg-green-50 px-3 py-2 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-xs font-medium">Entrega confirmada</span></div>';
+          } else if (isCancelada) {
+            botoesAcao = '<div class="flex items-center gap-2 text-red-600 bg-red-50 px-3 py-2 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg><span class="text-xs font-medium">Entrega cancelada</span></div>';
+          } else {
+            if (e.status === 'pendente') {
+              botoesAcao = '<button onclick="event.stopPropagation(); entregas_do_dia_checkin(\'' + e.id + '\')" class="flex-1 py-2.5 px-3 bg-marca-900 text-white text-xs font-medium rounded-xl active:scale-95 transition-all flex items-center justify-center gap-1.5"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Check-in Retirada</button>';
+            } else if (e.status === 'retirada') {
+              botoesAcao = '<button onclick="event.stopPropagation(); entregas_do_dia_abrirCheckout(\'' + e.id + '\')" class="flex-1 py-2.5 px-3 bg-green-600 text-white text-xs font-medium rounded-xl active:scale-95 transition-all flex items-center justify-center gap-1.5"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Check-out Entrega</button>';
+            }
+          }
+
+          const detalhesExpandidos = isExpandido && !isConcluida && !isCancelada ? `
+            <div class="mt-3 pt-3 border-t border-gray-100 space-y-3">
+              <div class="grid grid-cols-2 gap-2.5">
+                <div class="bg-gray-50 rounded-lg p-2.5">
+                  <p class="text-[10px] text-gray-400 uppercase tracking-wide">Retirada</p>
+                  <p class="text-sm font-medium text-gray-800 mt-0.5">${e.retirada}</p>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-2.5">
+                  <p class="text-[10px] text-gray-400 uppercase tracking-wide">Entrega prev.</p>
+                  <p class="text-sm font-medium text-gray-800 mt-0.5">${e.entrega}</p>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-2.5">
+                  <p class="text-[10px] text-gray-400 uppercase tracking-wide">Peso</p>
+                  <p class="text-sm font-medium text-gray-800 mt-0.5">${e.peso}</p>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-2.5">
+                  <p class="text-[10px] text-gray-400 uppercase tracking-wide">Tipo</p>
+                  <p class="text-sm font-medium text-gray-800 mt-0.5">${e.tipoCarga}</p>
+                </div>
+              </div>
+              <div>
+                <p class="text-[10px] text-gray-400 uppercase tracking-wide mb-1">Endereço completo</p>
+                <p class="text-xs text-gray-600 font-body leading-relaxed">${e.endereco}</p>
+                <p class="text-[10px] text-gray-400 mt-0.5">CEP: ${e.cep}</p>
+              </div>
+              <div>
+                <p class="text-[10px] text-gray-400 uppercase tracking-wide mb-1">Contato no local</p>
+                <p class="text-xs text-gray-700 font-medium">${e.contato}</p>
+              </div>
+              ${e.obs ? '<div class="bg-amber-50 border border-amber-200 rounded-lg p-2.5"><p class="text-[10px] text-amber-600 uppercase tracking-wide mb-0.5">Observação</p><p class="text-xs text-amber-800 font-body">' + e.obs + '</p></div>' : ''}
+              <div class="bg-marca-50 border border-marca-500/20 rounded-lg p-3 flex items-center justify-between">
+                <div>
+                  <p class="text-[10px] text-gray-500 uppercase tracking-wide">Comissão</p>
+                  <p class="text-lg font-display font-bold text-marca-900">R$ ${e.comissao.toFixed(2).replace('.', ',')}</p>
+                </div>
+                <button onclick="event.stopPropagation(); mostrarTela('comissoes-e-vales')" class="text-xs text-marca-500 font-medium hover:text-marca-900 transition-colors flex items-center gap-1">Detalhes <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>
+              </div>
+            </div>`;
+          return null;
+
+          return `
+            <div class="card bg-white rounded-2xl border border-gray-100 overflow-hidden transition-all duration-300 ${isConcluida ? 'opacity-75' : ''} ${isCancelada ? 'opacity-60' : ''}" data-entrega-id="${e.id}">
+              <div onclick="entregas_do_dia_toggleExpand('${e.id}')" class="p-4 cursor-pointer active:bg-gray-50 transition-colors">
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-8 h-8 rounded-full ${corAvatar} text-white flex items-center justify-center text-xs font-bold">${iniciais}</div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-2">
+                      <div class="flex items-center gap-2">
+                        <span class="text-xs font-mono font-bold text-marca-900">#${e.id}</span>
+                        ${entregas_do_dia_getStatusBadge(e.status)}
+                      </div>
+                      <svg class="w-4 h-4 text-gray-400 flex-shrink-0 transition-transform duration-200 ${isExpandido ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </div>
+                    <p class="text-sm font-display font-semibold text-gray-800 mt-1 truncate">${e.cliente}</p>
+                    <p class="text-xs text-gray-500 font-body truncate mt-0.5">${e.endereco.split(',')[0]}</p>
+                    <div class="flex items-center justify-between mt-2.5">
+                      <div class="flex items-center gap-3">
+                        <span class="flex items-center gap-1 text-[11px] text-gray-500"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>${e.retirada} → ${e.entrega}</span>
+                      </div>
+                      <span class="text-sm font-bold text-marca-500">R$ ${e.comissao.toFixed(2).replace('.', ',')}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="overflow-hidden transition-all duration-300 ${isExpandido ? 'max-h-[800px]' : 'max-h-0'}">
+                <div class="px-4 pb-4">
+                  ${detalhesExpandidos}
+                  <div class="mt-3">${botoesAcao}</div>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      window.entregas_do_dia_toggleExpand = function(id) {
+        itemExpandido = itemExpandido === id ? null : id;
+        itemCheckinAberto = null;
+        entregas_do_dia_renderLista();
+      };
+
+      window.entregas_do_dia_checkin = function(id) {
+        const entrega = entregas.find(e => e.id === id);
+        if (!entrega) return;
+        itemCheckinAberto = id;
+        itemExpandido = id;
+        entregas_do_dia_renderLista();
+
+        const container = document.getElementById('lista-entregas-container');
+        const cardEl = container.querySelector(`[data-entrega-id="${id}"]`);
+        if (!cardEl) return;
+
+        const detalhesDiv = cardEl.querySelector('.overflow-hidden > div');
+        if (!detalhesDiv) return;
+
+        const existing = detalhesDiv.querySelector('#checkin-form-container');
+        if (existing) return;
+
+        const checkinForm = document.createElement('div');
+        checkinForm.id = 'checkin-form-container';
+        checkinForm.className = 'mt-3 pt-3 border-t border-gray-100 space-y-3';
+        checkinForm.innerHTML = `
+          <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
+            <div class="flex items-center gap-2 mb-3">
+              <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <p class="text-sm font-display font-semibold text-blue-900">Confirmar Retirada</p>
+            </div>
+            <p class="text-xs text-blue-700 font-body mb-3">Registre o momento da retirada da carga. O sistema usará a localização atual.</p>
+            <div class="space-y-2.5">
+              <div>
+                <label class="text-xs font-medium text-blue-800 mb-1 block">Número da Nota Fiscal</label>
+                <input type="text" id="checkin-nf" placeholder="Ex: 001234" class="w-full px-3 py-2.5 bg-white border border-blue-200 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+              </div>
+              <div>
+                <label class="text-xs font-medium text-blue-800 mb-1 block">Quantidade de volumes</label>
+                <input type="number" id="checkin-volumes" placeholder="Ex: 10" class="w-full px-3 py-2.5 bg-white border border-blue-200 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+              </div>
+              <div>
+                <label class="text-xs font-medium text-blue-800 mb-1 block">Foto da carga (opcional)</label>
+                <div class="border-2 border-dashed border-blue-300 rounded-lg p-4 text-center cursor-pointer hover:bg-blue-50 transition-colors" onclick="document.getElementById('checkin-foto').click()">
+                  <svg class="w-6 h-6 text-blue-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                  <p class="text-xs text-blue-500">Toque para adicionar foto</p>
+                  <input type="file" id="checkin-foto" accept="image/*" class="hidden" onchange="entregas_do_dia_previewFoto(this, 'checkin-foto-preview')">
+                </div>
+                <img id="checkin-foto-preview" class="hidden mt-2 w-full h-32 object-cover rounded-lg">
+              </div>
+            </div>
+            <button onclick="entregas_do_dia_confirmarCheckin('${id}')" class="w-full mt-3 py-3 bg-blue-600 text-white text-sm font-semibold rounded-xl active:scale-95 transition-all flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              Confirmar Retirada
+            </button>
+          </div>
+        `;
+        detalhesDiv.appendChild(checkinForm);
+        checkinForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      };
+
+      window.entregas_do_dia_confirmarCheckin = function(id) {
+        const nf = document.getElementById('checkin-nf')?.value;
+        if (!nf || nf.trim() === '') {
+          toast('Informe o número da nota fiscal', 'erro');
+          return;
+        }
+        const entrega = entregas.find(e => e.id === id);
+        if (entrega) {
+          entrega.status = 'retirada';
+          itemCheckinAberto = null;
+          entregas_do_dia_renderLista();
+          toast('Retirada confirmada! Rota atualizada.', 'ok');
+          entregas_do_dia_atualizarProximaParada();
+        }
+      };
+
+      window.entregas_do_dia_abrirCheckout = function(id) {
+        const entrega = entregas.find(e => e.id === id);
+        if (!entrega) return;
+        itemCheckinAberto = id;
+        itemExpandido = id;
+        entregas_do_dia_renderLista();
+
+        const container = document.getElementById('lista-entregas-container');
+        const cardEl = container.querySelector(`[data-entrega-id="${id}"]`);
+        if (!cardEl) return;
+
+        const detalhesDiv = cardEl.querySelector('.overflow-hidden > div');
+        if (!detalhesDiv) return;
+
+        const existing = detalhesDiv.querySelector('#checkout-form-container');
+        if (existing) return;
+
+        const checkoutForm = document.createElement('div');
+        checkoutForm.id = 'checkout-form-container';
+        checkoutForm.className = 'mt-3 pt-3 border-t border-gray-100 space-y-3';
+        checkoutForm.innerHTML = `
+          <div class="bg-green-50 border border-green-200 rounded-xl p-4">
+            <div class="flex items-center gap-2 mb-3">
+              <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <p class="text-sm font-display font-semibold text-green-900">Confirmar Entrega</p>
+            </div>
+            <p class="text-xs text-green-700 font-body mb-3">Complete os dados abaixo para confirmar a entrega.</p>
+            <div class="space-y-2.5">
+              <div>
+                <label class="text-xs font-medium text-green-800 mb-1 block">Nome do recebedor</label>
+                <input type="text" id="checkout-recebedor" placeholder="Nome completo de quem recebeu" class="w-full px-3 py-2.5 bg-white border border-green-200 rounded-lg text-sm focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500">
+              </div>
+              <div>
+                <label class="text-xs font-medium text-green-800 mb-1 block">Documento do recebedor (RG/CPF)</label>
+                <input type="text" id="checkout-documento" placeholder="Número do documento" class="w-full px-3 py-2.5 bg-white border border-green-200 rounded-lg text-sm focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500">
+              </div>
+              <div>
+                <label class="text-xs font-medium text-green-800 mb-1 block">Assinatura digital do destinatário</label>
+                <div class="bg-white border border-green-200 rounded-lg overflow-hidden">
+                  <canvas id="signature-pad" width="350" height="150" class="w-full touch-none cursor-crosshair" style="height: 120px;"></canvas>
+                  <div class="flex justify-end p-2 bg-gray-50 border-t border-gray-100">
+                    <button onclick="entregas_do_dia_limparAssinatura()" class="text-xs text-gray-500 hover:text-gray-700 px-2 py-1">Limpar</button>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <label class="text-xs font-medium text-green-800 mb-1 block">Foto do comprovante de entrega</label>
+                <div class="border-2 border-dashed border-green-300 rounded-lg p-4 text-center cursor-pointer hover:bg-green-50 transition-colors" onclick="document.getElementById('checkout-foto').click()">
+                  <svg class="w-6 h-6 text-green-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                  <p class="text-xs text-green-500">Toque para adicionar foto do comprovante</p>
+                  <input type="file" id="checkout-foto" accept="image/*" class="hidden" onchange="entregas_do_dia_previewFoto(this, 'checkout-foto-preview')">
+                </div>
+                <img id="checkout-foto-preview" class="hidden mt-2 w-full h-32 object-cover rounded-lg">
+              </div>
+              <div>
+                <label class="text-xs font-medium text-green-800 mb-1 block">Observações da entrega (opcional)</label>
+                <textarea id="checkout-obs" rows="2" placeholder="Alguma observação sobre a entrega..." class="w-full px-3 py-2.5 bg-white border border-green-200 rounded-lg text-sm focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 resize-none"></textarea>
+              </div>
+            </div>
+            <button onclick="entregas_do_dia_confirmarCheckout('${id}')" class="w-full mt-3 py-3 bg-green-600 text-white text-sm font-semibold rounded-xl active:scale-95 transition-all flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              Confirmar Entrega
+            </button>
+          </div>
+        `;
+        detalhesDiv.appendChild(checkoutForm);
+        entregas_do_dia_iniciarAssinatura();
+        checkoutForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      };
+
+      window.entregas_do_dia_confirmarCheckout = function(id) {
+        const recebedor = document.getElementById('checkout-recebedor')?.value;
+        const documento = document.getElementById('checkout-documento')?.value;
+        if (!recebedor || recebedor.trim() === '') {
+          toast('Informe o nome do recebedor', 'erro');
+          return;
+        }
+        const canvas = document.getElementById('signature-pad');
+        if (canvas) {
+          const ctx = canvas.getContext('2d');
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          let hasSignature = false;
+          for (let i = 0; i < imageData.data.length; i += 4) {
+            if (imageData.data[i + 3] > 0) { hasSignature = true; break; }
+          }
+          if (!hasSignature) {
+            toast('Adicione a assinatura digital', 'erro');
+            return;
+          }
+        }
+        const entrega = entregas.find(e => e.id === id);
+        if (entrega) {
+          entrega.status = 'concluida';
+          itemCheckinAberto = null;
+          itemExpandido = null;
+          entregas_do_dia_renderLista();
+          toast('Entrega confirmada com sucesso! Comissão registrada: R$ ' + entrega.comissao.toFixed(2).replace('.', ','), 'ok');
+          entregas_do_dia_atualizarProximaParada();
+        }
+      };
+
+      window.entregas_do_dia_previewFoto = function(input, imgId) {
+        const img = document.getElementById(imgId);
+        if (input.files && input.files[0]) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            img.src = e.target.result;
+            img.classList.remove('hidden');
+          };
+          reader.readAsDataURL(input.files[0]);
+        }
+      };
+
+      window.entregas_do_dia_limparAssinatura = function() {
+        const canvas = document.getElementById('signature-pad');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      };
+
+      window.entregas_do_dia_iniciarAssinatura = function() {
+        const canvas = document.getElementById('signature-pad');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
+        let lastX = 0, lastY = 0;
+
+        function getPos(e) {
+          const rect = canvas.getBoundingClientRect();
+          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+          return { x: (clientX - rect.left) * (canvas.width / rect.width), y: (clientY - rect.top) * (canvas.height / rect.height) };
+        }
+
+        function startDraw(e) {
+          drawing = true;
+          const pos = getPos(e);
+          lastX = pos.x; lastY = pos.y;
+          ctx.beginPath();
+          ctx.moveTo(lastX, lastY);
+        }
+        function draw(e) {
+          if (!drawing) return;
+          e.preventDefault();
+          const pos = getPos(e);
+          ctx.strokeStyle = '#0A0A0A';
+          ctx.lineWidth = 2;
+          ctx.lineCap = 'round';
+          ctx.lineJoin = 'round';
+          ctx.lineTo(pos.x, pos.y);
+          ctx.stroke();
+          lastX = pos.x; lastY = pos.y;
+        }
+        function stopDraw() { drawing = false; }
+
+        canvas.addEventListener('mousedown', startDraw);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDraw);
+        canvas.addEventListener('mouseleave', stopDraw);
+        canvas.addEventListener('touchstart', startDraw);
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', stopDraw);
+      };
+
+      window.entregas_do_dia_toggleFiltro = function() {
+        const container = document.getElementById('filtro-container');
+        container.classList.toggle('hidden');
+      };
+
+      window.entregas_do_dia_filtrar = function(filtro) {
+        filtroAtual = filtro;
+        itemExpandido = null;
+        itemCheckinAberto = null;
+        document.querySelectorAll('.filtro-btn').forEach(btn => {
+          if (btn.dataset.filtro === filtro) {
+            btn.classList.remove('bg-gray-100', 'text-gray-600');
+            btn.classList.add('bg-marca-900', 'text-white');
+          } else {
+            btn.classList.add('bg-gray-100', 'text-gray-600');
+            btn.classList.remove('bg-marca-900', 'text-white');
+          }
+        });
+        entregas_do_dia_renderLista();
+      };
+
+      function entregas_do_dia_atualizarProximaParada() {
+        const pendentes = entregas.filter(e => e.status === 'pendente');
+        if (pendentes.length === 0) {
+          document.getElementById('proxima-parada-nome').textContent = 'Todas entregas concluídas!';
+          document.getElementById('proxima-parada-endereco').textContent = 'Parabéns pelo ótimo trabalho.';
+          document.getElementById('proxima-eta').textContent = '—';
+          document.getElementById('proxima-distancia').textContent = '—';
+          document.getElementById('eta-progress-bar').style.width = '100%';
+          return;
+        }
+        const proxima = pendentes[0];
+        document.getElementById('proxima-parada-nome').textContent = proxima.cliente;
+        document.getElementById('proxima-parada-endereco').textContent = proxima.endereco.split(',').slice(0, 2).join(',');
+      }
+
+      document.getElementById('busca-entregas').addEventListener('input', function(e) {
+        buscaAtual = e.target.value;
+        entregas_do_dia_renderLista();
+      });
+
+      entregas_do_dia_renderLista();
+    })();
+    </script>
+
     <!-- TELAS -->
     </main>
 
