@@ -1420,6 +1420,356 @@ function detalhe_do_pedido_ligarMotorista() {
 }
 </script>
 
+    <section data-tela="comissoes-e-vales" class="hidden">
+      <div class="fade-in">
+        <!-- Cabeçalho da tela -->
+        <header class="mb-5">
+          <h1 class="font-display text-xl font-bold text-marca-900 leading-tight">Comissões e Vales</h1>
+          <p class="text-sm text-marca-900/60 mt-1">Controle financeiro de motoristas — Junho 2025</p>
+        </header>
+
+        <!-- Cards de resumo -->
+        <div class="grid grid-cols-3 gap-3 mb-5">
+          <div class="card p-3 text-center">
+            <div class="w-8 h-8 mx-auto mb-2 rounded-full bg-marca-900/10 flex items-center justify-center">
+              <svg class="w-4 h-4 text-marca-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <p class="text-[10px] text-marca-900/50 uppercase tracking-wider mb-0.5">Comissões</p>
+            <p class="font-display font-bold text-marca-900 text-base leading-tight">R$ 12.350</p>
+            <p class="text-[10px] text-emerald-600 mt-0.5">+8.3% vs mês anterior</p>
+          </div>
+          <div class="card p-3 text-center">
+            <div class="w-8 h-8 mx-auto mb-2 rounded-full bg-marca-900/10 flex items-center justify-center">
+              <svg class="w-4 h-4 text-marca-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            </div>
+            <p class="text-[10px] text-marca-900/50 uppercase tracking-wider mb-0.5">Vales Pagos</p>
+            <p class="font-display font-bold text-marca-900 text-base leading-tight">R$ 3.200</p>
+            <p class="text-[10px] text-amber-600 mt-0.5">12 solicitações</p>
+          </div>
+          <div class="card p-3 text-center">
+            <div class="w-8 h-8 mx-auto mb-2 rounded-full bg-marca-900/10 flex items-center justify-center">
+              <svg class="w-4 h-4 text-marca-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            </div>
+            <p class="text-[10px] text-marca-900/50 uppercase tracking-wider mb-0.5">Saldo a Pagar</p>
+            <p class="font-display font-bold text-marca-900 text-base leading-tight">R$ 9.150</p>
+            <p class="text-[10px] text-emerald-600 mt-0.5">Liberado para saque</p>
+          </div>
+        </div>
+
+        <!-- Lista de Motoristas -->
+        <div class="mb-5">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="font-display font-semibold text-marca-900 text-sm">Motoristas</h2>
+            <button onclick="mostrarTela('motoristas')" class="text-xs text-marca-900/60 hover:text-marca-900 transition-colors flex items-center gap-1">
+              Ver todos
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+          <div class="relative mb-3">
+            <svg class="w-4 h-4 text-marca-900/40 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input id="comissoes-busca" type="text" placeholder="Buscar motorista..." class="w-full pl-9 pr-4 py-2.5 text-sm bg-white border border-marca-900/10 rounded-lg focus:outline-none focus:border-marca-900/40 focus:ring-1 focus:ring-marca-900/20 transition-all" oninput="comissoes_e_vales_filtrarMotoristas()">
+          </div>
+          <div id="comissoes-lista-motoristas" class="space-y-2">
+          </div>
+          <div id="comissoes-vazio-motoristas" class="hidden text-center py-6">
+            <svg class="w-10 h-10 text-marca-900/20 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <p class="text-sm text-marca-900/40">Nenhum motorista encontrado</p>
+          </div>
+        </div>
+
+        <!-- Vales Solicitados -->
+        <div class="mb-5">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="font-display font-semibold text-marca-900 text-sm">Vales Solicitados</h2>
+            <span id="comissoes-contador-vales" class="badge bg-amber-100 text-amber-700 text-[10px] font-semibold px-2 py-0.5 rounded-full">4 pendentes</span>
+          </div>
+          <div id="comissoes-lista-vales" class="space-y-2.5">
+          </div>
+          <div id="comissoes-vazio-vales" class="hidden text-center py-6">
+            <svg class="w-10 h-10 text-marca-900/20 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <p class="text-sm text-marca-900/40">Nenhum vale solicitado no momento</p>
+          </div>
+        </div>
+
+        <!-- Gráfico de Comissões -->
+        <div class="mb-5">
+          <h2 class="font-display font-semibold text-marca-900 text-sm mb-3">Comissões — Últimos 6 Meses</h2>
+          <div class="card p-4">
+            <svg id="comissoes-grafico" viewBox="0 0 320 160" class="w-full h-auto">
+            </svg>
+          </div>
+        </div>
+
+        <!-- Ações rápidas -->
+        <div class="mb-6">
+          <h2 class="font-display font-semibold text-marca-900 text-sm mb-3">Ações Rápidas</h2>
+          <div class="grid grid-cols-2 gap-2.5">
+            <button onclick="mostrarTela('controle-financeiro')" class="card p-3 flex items-center gap-2.5 active:scale-95 transition-transform cursor-pointer text-left">
+              <div class="w-9 h-9 rounded-lg bg-marca-900 flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+              </div>
+              <div>
+                <p class="text-xs font-semibold text-marca-900 leading-tight">Controle Financeiro</p>
+                <p class="text-[10px] text-marca-900/50">Lançamentos e saídas</p>
+              </div>
+            </button>
+            <button onclick="mostrarTela('motoristas')" class="card p-3 flex items-center gap-2.5 active:scale-95 transition-transform cursor-pointer text-left">
+              <div class="w-9 h-9 rounded-lg bg-marca-900 flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              </div>
+              <div>
+                <p class="text-xs font-semibold text-marca-900 leading-tight">Gerenciar Motoristas</p>
+                <p class="text-[10px] text-marca-900/50">Cadastro e comissões</p>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal de detalhe do motorista -->
+      <div id="comissoes-modal-motorista" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-end justify-center" onclick="if(event.target===this)comissoes_e_vales_fecharModalMotorista()">
+        <div class="bg-white rounded-t-2xl w-full max-w-[430px] max-h-[80vh] overflow-y-auto animate-slide-up">
+          <div id="comissoes-modal-motorista-conteudo"></div>
+        </div>
+      </div>
+
+      <!-- Modal de confirmação de vale -->
+      <div id="comissoes-modal-vale" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-5" onclick="if(event.target===this)comissoes_e_vales_fecharModalVale()">
+        <div class="bg-white rounded-2xl w-full max-w-[360px] p-5 animate-fade-in">
+          <div id="comissoes-modal-vale-conteudo"></div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      (function() {
+        var motoristas = [
+          { id: 1, nome: 'Carlos Eduardo Silva', foto: 'CS', cor: '#1a3a5c', entregas: 47, fretes: 28400, comissao: 7, corAvatar: 'bg-blue-900' },
+          { id: 2, nome: 'Fernando Oliveira', foto: 'FO', cor: '#3d5a1e', entregas: 39, fretes: 22100, comissao: 7, corAvatar: 'bg-emerald-900' },
+          { id: 3, nome: 'Roberto Santos', foto: 'RS', cor: '#5c1a1a', entregas: 52, fretes: 31800, comissao: 6, corAvatar: 'bg-red-900' },
+          { id: 4, nome: 'Marcos Paulo Costa', foto: 'MC', cor: '#4a3a0a', entregas: 34, fretes: 19500, comissao: 8, corAvatar: 'bg-yellow-900' },
+          { id: 5, nome: 'André Luiz Ferreira', foto: 'AF', cor: '#1a4a3a', entregas: 41, fretes: 25600, comissao: 7, corAvatar: 'bg-teal-900' },
+          { id: 6, nome: 'Ricardo Souza', foto: 'RS', cor: '#4a1a5c', entregas: 28, fretes: 16800, comissao: 7, corAvatar: 'bg-purple-900' },
+          { id: 7, nome: 'Paulo Henrique Almeida', foto: 'PA', cor: '#5c3a1a', entregas: 36, fretes: 21200, comissao: 6, corAvatar: 'bg-orange-900' }
+        ];
+
+        var vales = [
+          { id: 1, motorista: 'Carlos Eduardo Silva', foto: 'CS', valor: 500, data: '2025-06-18', status: 'pendente' },
+          { id: 2, motorista: 'Roberto Santos', foto: 'RS', valor: 350, data: '2025-06-17', status: 'pendente' },
+          { id: 3, motorista: 'Fernando Oliveira', foto: 'FO', valor: 800, data: '2025-06-16', status: 'pendente' },
+          { id: 4, motorista: 'Marcos Paulo Costa', foto: 'MC', valor: 200, data: '2025-06-15', status: 'aprovado' },
+          { id: 5, motorista: 'André Luiz Ferreira', foto: 'AF', valor: 600, data: '2025-06-14', status: 'rejeitado' },
+          { id: 6, motorista: 'Ricardo Souza', foto: 'RS', valor: 450, data: '2025-06-13', status: 'aprovado' }
+        ];
+
+        function comissoes_e_vales_calcularAReceber(fretes, comissao) {
+          return fretes * comissao / 100;
+        }
+
+        function comissoes_e_vales_renderMotoristas(lista) {
+          var container = document.getElementById('comissoes-lista-motoristas');
+          var vazio = document.getElementById('comissoes-vazio-motoristas');
+          if (lista.length === 0) {
+            container.innerHTML = '';
+            vazio.classList.remove('hidden');
+            return;
+          }
+          vazio.classList.add('hidden');
+          container.innerHTML = lista.map(function(m) {
+            var aReceber = comissoes_e_vales_calcularAReceber(m.fretes, m.comissao);
+            return '<div class="card p-3 flex items-center gap-3 cursor-pointer active:scale-[0.98] transition-transform" onclick="comissoes_e_vales_abrirModalMotorista(' + m.id + ')">' +
+              '<div class="w-10 h-10 rounded-full ' + m.corAvatar + ' text-white flex items-center justify-center font-display font-bold text-xs shrink-0">' + m.foto + '</div>' +
+              '<div class="flex-1 min-w-0">' +
+                '<p class="text-sm font-semibold text-marca-900 truncate">' + m.nome + '</p>' +
+                '<p class="text-[11px] text-marca-900/50">' + m.entregas + ' entregas · ' + m.comissao + '% comissão</p>' +
+              '</div>' +
+              '<div class="text-right shrink-0">' +
+                '<p class="font-display font-bold text-sm text-marca-900">' + comissoes_e_vales_formatarMoeda(aReceber) + '</p>' +
+                '<p class="text-[10px] text-marca-900/40">a receber</p>' +
+              '</div>' +
+            '</div>';
+          }).join('');
+        }
+
+        function comissoes_e_vales_renderVales(lista) {
+          var container = document.getElementById('comissoes-lista-vales');
+          var vazio = document.getElementById('comissoes-vazio-vales');
+          if (lista.length === 0) {
+            container.innerHTML = '';
+            vazio.classList.remove('hidden');
+            return;
+          }
+          vazio.classList.add('hidden');
+          container.innerHTML = lista.map(function(v) {
+            var statusMap = {
+              'pendente': { classe: 'bg-amber-100 text-amber-700', label: 'Pendente' },
+              'aprovado': { classe: 'bg-emerald-100 text-emerald-700', label: 'Aprovado' },
+              'rejeitado': { classe: 'bg-red-100 text-red-700', label: 'Rejeitado' }
+            };
+            var st = statusMap[v.status] || statusMap['pendente'];
+            var acoes = '';
+            if (v.status === 'pendente') {
+              acoes = '<div class="flex gap-2 mt-2.5">' +
+                '<button onclick="event.stopPropagation();comissoes_e_vales_abrirModalVale(' + v.id + ',\'aprovar\')" class="flex-1 py-1.5 text-xs font-semibold bg-emerald-600 text-white rounded-lg active:scale-95 transition-all hover:bg-emerald-700">Aprovar Vale</button>' +
+                '<button onclick="event.stopPropagation();comissoes_e_vales_abrirModalVale(' + v.id + ',\'rejeitar\')" class="flex-1 py-1.5 text-xs font-semibold bg-marca-900/10 text-marca-900 rounded-lg active:scale-95 transition-all hover:bg-marca-900/20">Rejeitar Vale</button>' +
+              '</div>';
+            }
+            return '<div class="card p-3 ' + (v.status === 'pendente' ? 'border-l-2 border-l-amber-400' : '') + '">' +
+              '<div class="flex items-center gap-3">' +
+                '<div class="w-9 h-9 rounded-full ' + (v.status === 'aprovado' ? 'bg-emerald-900' : v.status === 'rejeitado' ? 'bg-red-900' : 'bg-marca-900/20') + ' text-white flex items-center justify-center font-display font-bold text-[10px] shrink-0">' + v.foto + '</div>' +
+                '<div class="flex-1 min-w-0">' +
+                  '<p class="text-sm font-medium text-marca-900 truncate">' + v.motorista + '</p>' +
+                  '<p class="text-[11px] text-marca-900/50">Solicitado em ' + comissoes_e_vales_formatarData(v.data) + '</p>' +
+                '</div>' +
+                '<div class="text-right shrink-0">' +
+                  '<p class="font-display font-bold text-sm text-marca-900">' + comissoes_e_vales_formatarMoeda(v.valor) + '</p>' +
+                  '<span class="badge ' + st.classe + ' text-[10px] font-semibold px-1.5 py-0.5 rounded-full">' + st.label + '</span>' +
+                '</div>' +
+              '</div>' +
+              acoes +
+            '</div>';
+          }).join('');
+          comissoes_e_vales_atualizarContador();
+        }
+
+        function comissoes_e_vales_atualizarContador() {
+          var pendentes = vales.filter(function(v) { return v.status === 'pendente'; }).length;
+          var el = document.getElementById('comissoes-contador-vales');
+          if (el) el.textContent = pendentes + ' pendente' + (pendentes !== 1 ? 's' : '');
+        }
+
+        function comissoes_e_vales_filtrarMotoristas() {
+          var termo = document.getElementById('comissoes-busca').value.toLowerCase().trim();
+          var filtrados = motoristas.filter(function(m) {
+            return m.nome.toLowerCase().indexOf(termo) !== -1;
+          });
+          comissoes_e_vales_renderMotoristas(filtrados);
+        }
+
+        function comissoes_e_vales_abrirModalMotorista(id) {
+          var m = motoristas.find(function(x) { return x.id === id; });
+          if (!m) return;
+          var aReceber = comissoes_e_vales_calcularAReceber(m.fretes, m.comissao);
+          var html = '<div class="p-5">' +
+            '<div class="flex items-center gap-3 mb-4">' +
+              '<div class="w-14 h-14 rounded-full ' + m.corAvatar + ' text-white flex items-center justify-center font-display font-bold text-lg">' + m.foto + '</div>' +
+              '<div><p class="font-display font-bold text-marca-900 text-lg">' + m.nome + '</p><p class="text-xs text-marca-900/50">Comissão: ' + m.comissao + '%</p></div>' +
+            '</div>' +
+            '<div class="grid grid-cols-3 gap-2 mb-4">' +
+              '<div class="bg-marca-900/5 rounded-lg p-2.5 text-center"><p class="text-[10px] text-marca-900/50 mb-0.5">Entregas</p><p class="font-display font-bold text-marca-900 text-sm">' + m.entregas + '</p></div>' +
+              '<div class="bg-marca-900/5 rounded-lg p-2.5 text-center"><p class="text-[10px] text-marca-900/50 mb-0.5">Fretes</p><p class="font-display font-bold text-marca-900 text-sm">' + comissoes_e_vales_formatarMoeda(m.fretes) + '</p></div>' +
+              '<div class="bg-marca-900/5 rounded-lg p-2.5 text-center"><p class="text-[10px] text-marca-900/50 mb-0.5">A Receber</p><p class="font-display font-bold text-marca-900 text-sm">' + comissoes_e_vales_formatarMoeda(aReceber) + '</p></div>' +
+            '</div>' +
+            '<div class="mb-4">' +
+              '<p class="text-xs font-semibold text-marca-900 mb-2">Entregas Recentes</p>' +
+              '<div class="space-y-2">' +
+                '<div class="flex justify-between items-center py-2 border-b border-marca-900/5"><div><p class="text-xs text-marca-900">#SP-2847</p><p class="text-[10px] text-marca-900/50">São Paulo → Campinas</p></div><span class="badge bg-emerald-100 text-emerald-700 text-[10px] px-1.5 py-0.5 rounded-full">Entregue</span></div>' +
+                '<div class="flex justify-between items-center py-2 border-b border-marca-900/5"><div><p class="text-xs text-marca-900">#SP-2891</p><p class="text-[10px] text-marca-900/50">São Paulo → Ribeirão Preto</p></div><span class="badge bg-emerald-100 text-emerald-700 text-[10px] px-1.5 py-0.5 rounded-full">Entregue</span></div>' +
+                '<div class="flex justify-between items-center py-2"><div><p class="text-xs text-marca-900">#SP-2903</p><p class="text-[10px] text-marca-900/50">São Paulo → Sorocaba</p></div><span class="badge bg-blue-100 text-blue-700 text-[10px] px-1.5 py-0.5 rounded-full">Em trânsito</span></div>' +
+              '</div>' +
+            '</div>' +
+            '<button onclick="comissoes_e_vales_fecharModalMotorista();mostrarTela(\'motoristas\')" class="w-full py-2.5 bg-marca-900 text-white text-sm font-semibold rounded-lg active:scale-95 transition-all">Ver Perfil Completo</button>' +
+          '</div>';
+          var modal = document.getElementById('comissoes-modal-motorista');
+          document.getElementById('comissoes-modal-motorista-conteudo').innerHTML = html;
+          modal.classList.remove('hidden');
+        }
+
+        function comissoes_e_vales_fecharModalMotorista() {
+          document.getElementById('comissoes-modal-motorista').classList.add('hidden');
+        }
+
+        function comissoes_e_vales_abrirModalVale(id, acao) {
+          var v = vales.find(function(x) { return x.id === id; });
+          if (!v) return;
+          var titulo = acao === 'aprovador' ? 'Aprovar Vale' : 'Rejeitar Vale';
+          var acaoCor = acao === 'aprovador' ? 'emerald' : 'red';
+          var acaoTexto = acao === 'aprovador' ? 'Aprovar' : 'Rejeitar';
+          var html = '<div class="text-center mb-4">' +
+            '<div class="w-12 h-12 mx-auto mb-3 rounded-full bg-' + acaoCor + '-100 flex items-center justify-center">' +
+              '<svg class="w-6 h-6 text-' + acaoCor + '-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="' + (acao === 'aprovador' ? 'M5 13l4 4L19 7' : 'M6 18L18 6M6 6l12 12') + '"/></svg>' +
+            '</div>' +
+            '<p class="text-sm text-marca-900/70 mb-1">Confirmar ' + acaoTexto.toLowerCase() + ' do vale?</p>' +
+            '<p class="font-display font-bold text-marca-900 text-lg">' + comissoes_e_vales_formatarMoeda(v.valor) + '</p>' +
+            '<p class="text-xs text-marca-900/50">' + v.motorista + ' · Solicitado em ' + comissoes_e_vales_formatarData(v.data) + '</p>' +
+          '</div>' +
+          '<div class="flex gap-2">' +
+            '<button onclick="comissoes_e_vales_fecharModalVale()" class="flex-1 py-2.5 text-sm font-semibold border border-marca-900/15 text-marca-900 rounded-lg active:scale-95 transition-all">Cancelar</button>' +
+            '<button onclick="comissoes_e_vales_processarVale(' + v.id + ',\'' + acao + '\')" class="flex-1 py-2.5 text-sm font-semibold bg-' + acaoCor + '-600 text-white rounded-lg active:scale-95 transition-all">' + acaoTexto + '</button>' +
+          '</div>';
+          var modal = document.getElementById('comissoes-modal-vale');
+          document.getElementById('comissoes-modal-vale-conteudo').innerHTML = html;
+          modal.classList.remove('hidden');
+        }
+
+        function comissoes_e_vales_processarVale(id, acao) {
+          var v = vales.find(function(x) { return x.id === id; });
+          if (!v) return;
+          v.status = acao === 'aprovador' ? 'aprovado' : 'rejeitado';
+          comissoes_e_vales_fecharModalVale();
+          comissoes_e_vales_renderVales(vales);
+          toast(acao === 'aprovador' ? 'Vale de ' + comissoes_e_vales_formatarMoeda(v.valor) + ' aprovado para ' + v.motorista : 'Vale de ' + comissoes_e_vales_formatarMoeda(v.valor) + ' rejeitado', 'ok');
+        }
+
+        function comissoes_e_vales_fecharModalVale() {
+          document.getElementById('comissoes-modal-vale').classList.add('hidden');
+        }
+
+        function comissoes_e_vales_formatarMoeda(valor) {
+          return 'R$ ' + valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function comissoes_e_vales_formatarData(iso) {
+          var partes = iso.split('-');
+          return partes[2] + '/' + partes[1] + '/' + partes[0];
+        }
+
+        function comissoes_e_vales_desenharGrafico() {
+          var dados = [
+            { mes: 'Jan', valor: 8400 },
+            { mes: 'Fev', valor: 9200 },
+            { mes: 'Mar', valor: 10100 },
+            { mes: 'Abr', valor: 11300 },
+            { mes: 'Mai', valor: 10800 },
+            { mes: 'Jun', valor: 12350 }
+          ];
+          var maxValor = Math.max.apply(null, dados.map(function(d) { return d.valor; }));
+          var largura = 320;
+          var altura = 160;
+          var margem = { top: 10, right: 10, bottom: 30, left: 40 };
+          var larguraGrafico = largura - margem.left - margem.right;
+          var alturaGrafico = altura - margem.top - margem.bottom;
+          var larguraBarra = Math.floor(larguraGrafico / dados.length * 0.6);
+          var espacamento = larguraGrafico / dados.length;
+
+          var barras = dados.map(function(d, i) {
+            var barraAltura = (d.valor / maxValor) * alturaGrafico;
+            var x = margem.left + i * espacamento + (espacamento - larguraBarra) / 2;
+            var y = margem.top + alturaGrafico - barraAltura;
+            var valorLabel = d.valor >= 10000 ? (d.valor / 1000).toFixed(1) + 'k' : d.valor.toString();
+            return '<rect x="' + x + '" y="' + y + '" width="' + larguraBarra + '" height="' + barraAltura + '" rx="3" fill="#0A0A0A" class="transition-all duration-300 hover:fill-[#D4AF37]"/><text x="' + (x + larguraBarra / 2) + '" y="' + (y - 5) + '" text-anchor="middle" class="text-[9px] fill-marca-900/60 font-body">' + valorLabel + '</text><text x="' + (x + larguraBarra / 2) + '" y="' + (altura - 8) + '" text-anchor="middle" class="text-[9px] fill-marca-900/50 font-body">' + d.mes + '</text>';
+          }).join('');
+
+          var linhasGrid = [0.25, 0.5, 0.75, 1].map(function(f) {
+            var y = margem.top + alturaGrafico * (1 - f);
+            return '<line x1="' + margem.left + '" y1="' + y + '" x2="' + (largura - margem.right) + '" y2="' + y + '" stroke="#0A0A0A" stroke-width="0.3" stroke-dasharray="2,3" opacity="0.15"/>';
+          }).join('');
+
+          var svg = '<line x1="' + margem.left + '" y1="' + (altura - margem.bottom) + '" x2="' + (largura - margem.right) + '" y2="' + (altura - margem.bottom) + '" stroke="#0A0A0A" stroke-width="0.5" opacity="0.2"/>' + linhasGrid + barras;
+
+          document.getElementById('comissoes-grafico').innerHTML = svg;
+        }
+
+        function comissoes_e_vales_init() {
+          comissoes_e_vales_renderMotoristas(motoristas);
+          comissoes_e_vales_renderVales(vales);
+          comissoes_e_vales_desenharGrafico();
+        }
+
+        comissoes_e_vales_init();
+      })();
+    </script>
+
     <!-- TELAS -->
     </main>
 
