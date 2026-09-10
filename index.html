@@ -403,6 +403,179 @@
       </script>
     </section>
 
+    <section data-tela="novo-pedido" class="hidden">
+  <div class="mb-4 flex items-center justify-between">
+    <div>
+      <h1 class="font-display text-xl font-bold text-marca-900">Novo Pedido</h1>
+      <p class="text-sm text-gray-500 mt-0.5">Cadastre um novo orçamento de frete</p>
+    </div>
+    <button onclick="novo_pedido_cancelar()" class="rounded-full bg-gray-100 p-2 active:scale-95 transition">
+      <svg class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <div class="flex items-center gap-1.5 mb-5" id="novo_pedido_steps">
+    <div class="novo_pedido-step-dot flex-1 h-1 rounded-full bg-marca-500 transition-all" data-step="0"></div>
+    <div class="novo_pedido_step_dot flex-1 h-1 rounded-full bg-gray-200 transition-all" data-step="1"></div>
+    <div class="novo_pedido_step_dot flex-1 h-1 rounded-full bg-gray-200 transition-all" data-step="2"></div>
+    <div class="novo_pedido_step_dot flex-1 h-1 rounded-full bg-gray-200 transition-all" data-step="3"></div>
+    <div class="novo_pedido_step_dot flex-1 h-1 rounded-full bg-gray-200 transition-all" data-step="4"></div>
+  </div>
+
+  <div class="rounded-2xl border border-gray-100 bg-white p-4 mb-4 shadow-sm">
+    <div class="flex items-center gap-2 mb-3">
+      <div class="rounded-lg bg-marca-900 p-1.5"><svg class="h-4 w-4 text-marca-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg></div>
+      <span class="font-display font-semibold text-sm text-marca-900" id="novo_pedido_step_label">Passo 1 de 5</span>
+    </div>
+    <p class="text-xs text-gray-400" id="novo_pedido_step_desc">Selecione o cliente para este frete</p>
+  </div>
+
+  <div id="novo_pedido_step_0" class="novo_pedido_step_content">
+    <label class="block text-sm font-semibold text-marca-900 mb-1.5">Cliente</label>
+    <div class="relative mb-3">
+      <div class="relative">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input id="novo_pedido_search_cliente" type="text" placeholder="Buscar por nome ou CNPJ..." oninput="novo_pedido_filtrarClientes(this.value)" class="w-full rounded-xl border border-gray-200 py-2.5 pl-10 pr-4 text-sm bg-gray-50 focus:border-marca-500 focus:ring-1 focus:ring-marca-500 focus:outline-none transition" autocomplete="off"/>
+      </div>
+      <div id="novo_pedido_cliente_results" class="hidden absolute z-30 mt-1 w-full rounded-xl border border-gray-100 bg-white shadow-lg overflow-hidden"></div>
+    </div>
+    <div id="novo_pedido_cliente_list">
+      <div onclick="novo_pedido_selectCliente(0)" class="card cursor-pointer transition active:scale-[0.98]"><div class="flex items-center gap-3"><div class="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-marca-600 font-bold text-sm">TM</div><div class="flex-1 min-w-0"><p class="font-semibold text-sm text-marca-900 truncate">Trans Mato Grosso LTDA</p><p class="text-xs text-gray-500">12.345.678/0001-90</p></div><svg class="h-5 w-5 text-gray-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></div></div>
+      <div onclick="novo_pedido_selectCliente(1)" class="card cursor-pointer transition active:scale-[0.98]"><div class="flex items-center gap-3"><div class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 font-bold text-sm">AG</div><div class="flex-1 min-w-0"><p class="font-semibold text-sm text-marca-900 truncate">Agropecuária Guarani</p><p class="text-xs text-gray-500">98.765.432/0001-10</p></div><svg class="h-5 w-5 text-gray-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></div></div>
+      <div onclick="novo_pedido_selectCliente(2)" class="card cursor-pointer transition active:scale-[0.98]"><div class="flex items-center gap-3"><div class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-700 font-bold text-sm">CM</div><div class="flex-1 min-w-0"><p class="font-semibold text-sm text-marca-900 truncate">Celulose Minas</p><p class="text-xs text-gray-500">45.678.901/0001-55</p></div><svg class="h-5 w-5 text-gray-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></div></div>
+      <div onclick="novo_pedido_selectCliente(3)" class="card cursor-pointer transition active:scale-[0.98]"><div class="flex items-center gap-3"><div class="flex h-10 w-10 items-center justify-center rounded-full bg-rose-100 text-rose-700 font-bold text-sm">DS</div><div class="flex-1 min-w-0"><p class="font-semibold text-sm text-marca-900 truncate">Distribuidora Sul</p><p class="text-xs text-gray-500">34.567.890/0001-33</p></div><svg class="h-5 w-5 text-gray-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></div></div>
+      <div onclick="novo_pedido_selectCliente(4)" class="card cursor-pointer transition active:scale-[0.98]"><div class="flex items-center gap-3"><div class="flex h-10 w-10 items-center justify-center rounded-full bg-violet-100 text-violet-700 font-bold text-sm">MP</div><div class="flex-1 min-w-0"><p class="font-semibold text-sm text-marca-900 truncate">Madeiras Paraná</p><p class="text-xs text-gray-500">23.456.789/0001-77</p></div><svg class="h-5 w-5 text-gray-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></div></div>
+      <div onclick="novo_pedido_selectCliente(5)" class="card cursor-pointer transition active:scale-[0.98]"><div class="flex items-center gap-3"><div class="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-orange-700 font-bold text-sm">CB</div><div class="flex-1 min-w-0"><p class="font-semibold text-sm text-marca-900 truncate">Café Brasil Export</p><p class="text-xs text-gray-500">56.789.012/0001-99</p></div><svg class="h-5 w-5 text-gray-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></div></div>
+    </div>
+    <div id="novo_pedido_empty_clients" class="hidden py-8 text-center"><svg class="h-12 w-12 text-gray-300 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6a2.25 2.25 0 00-2.25-2.25H4.5A2.25 2.25 0 002.25 6v11.25A2.25 2.25 0 004.5 19.5z"/></svg><p class="text-sm text-gray-400">Nenhum cliente encontrado</p></div>
+  </div>
+
+  <div id="novo_pedido_step_1" class="novo_pedido_step_content hidden">
+    <label class="block text-sm font-semibold text-marca-900 mb-1.5">Origem</label>
+    <div class="relative mb-3">
+      <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/></svg>
+      <input id="novo_pedido_origem" type="text" placeholder="Cidade ou endereço de origem..." oninput="novo_pedido_filtrarEnderecos('origem', this.value)" class="w-full rounded-xl border border-gray-200 py-2.5 pl-10 pr-4 text-sm bg-gray-50 focus:border-marca-500 focus:ring-1 focus:ring-marca-500 focus:outline-none transition" autocomplete="off"/>
+      <div id="novo_pedido_origem_results" class="hidden absolute z-30 mt-1 w-full rounded-xl border border-gray-100 bg-white shadow-lg overflow-hidden"></div>
+    </div>
+    <label class="block text-sm font-semibold text-marca-900 mb-1.5">Destino</label>
+    <div class="relative mb-3">
+      <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/></svg>
+      <input id="novo_pedido_destino" type="text" placeholder="Cidade ou endereço de destino..." oninput="novo_pedido_filtrarEnderecos('destino', this.value)" class="w-full rounded-xl border border-gray-200 py-2.5 pl-10 pr-4 text-sm bg-gray-50 focus:border-marca-500 focus:ring-1 focus:ring-marca-500 focus:outline-none transition" autocomplete="off"/>
+      <div id="novo_pedido_destino_results" class="hidden absolute z-30 mt-1 w-full rounded-xl border border-gray-100 bg-white shadow-lg overflow-hidden"></div>
+    </div>
+    <p class="text-xs text-gray-400 flex items-center gap-1"><svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Sugestões de endereços cadastrados aparecem ao digitar</p>
+  </div>
+
+  <div id="novo_pedido_step_2" class="novo_pedido_step_content hidden">
+    <label class="block text-sm font-semibold text-marca-900 mb-2">Tipo de Carga</label>
+    <div class="grid grid-cols-2 gap-2 mb-4" id="novo_pedido_carga_grid">
+      <button onclick="novo_pedido_selectCarga(this,'Carga Geral')" class="novo_pedido_carga_btn card flex items-center gap-2.5 p-3 transition text-left"><svg class="h-5 w-5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg><span class="text-xs font-medium text-gray-700">Geral</span></button>
+      <button onclick="novo_pedido_selectCarga(this,'Granel Sólido')" class="novo_pedido_carga_btn card flex items-center gap-2.5 p-3 transition text-left"><svg class="h-5 w-5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12m-3.75.75h9.75m-9.75 0V19.5m0 2.25h9.75m-9.75 0V19.5m0 2.25H12m-3.75.75h9.75"/></svg><span class="text-xs font-medium text-gray-700">Granel</span></button>
+      <button onclick="novo_pedido_selectCarga(this,'Refrigerada')" class="novo_pedido_carga_btn card flex items-center gap-2.5 p-3 transition text-left"><svg class="h-5 w-5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"/></svg><span class="text-xs font-medium text-gray-700">Refrigerada</span></button>
+      <button onclick="novo_pedido_selectCarga(this,'Perigosa')" class="novo_pedido_carga_btn card flex items-center gap-2.5 p-3 transition text-left"><svg class="h-5 w-5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg><span class="text-xs font-medium text-gray-700">Perigosa</span></button>
+    </div>
+    <div class="mb-4"><label class="block text-sm font-semibold text-marca-900 mb-1.5">Peso da Carga (kg)</label>
+      <div class="relative"><input id="novo_pedido_peso" type="text" placeholder="Ex: 12500" oninput="novo_pedido_soNum(this)" class="w-full rounded-xl border border-gray-200 py-2.5 pl-4 pr-10 text-sm bg-gray-50 focus:border-marca-500 focus:ring-1 focus:ring-marca-500 focus:outline-none transition"/><span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">kg</span></div>
+    </div>
+    <div class="mb-4"><label class="block text-sm font-semibold text-marca-900 mb-1.5">Valor do Frete (R$)</label>
+      <div class="relative"><span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">R$</span><input id="novo_pedido_valor" type="text" placeholder="0,00" oninput="novo_pedido_moeda(this)" class="w-full rounded-xl border border-gray-200 py-2.5 pl-10 pr-4 text-sm bg-gray-50 focus:border-marca-500 focus:ring-1 focus:ring-marca-500 focus:outline-none transition"/></div>
+    </div>
+    <div><label class="block text-sm font-semibold text-marca-900 mb-1.5">Prazo de Entrega</label>
+      <div class="relative"><svg class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg><input id="novo_pedido_prazo" type="text" placeholder="Ex: até 5 dias úteis" class="w-full rounded-xl border border-gray-200 py-2.5 pl-10 pr-4 text-sm bg-gray-50 focus:border-marca-500 focus:ring-1 focus:ring-marca-500 focus:outline-none transition"/></div>
+    </div>
+  </div>
+
+  <div id="novo_pedido_step_3" class="novo_pedido_step_content hidden">
+    <div class="rounded-2xl overflow-hidden border border-gray-200 relative bg-gray-100" style="height:200px">
+      <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice">
+        <defs><pattern id="mapGrid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e5e7eb" stroke-width="0.5"/></pattern></defs>
+        <rect width="400" height="200" fill="#f3f4f6"/><rect width="400" height="200" fill="url(#mapGrid)"/>
+        <path d="M 40 160 Q 100 140 140 120 T 220 90 T 300 60 T 360 40" fill="none" stroke="#D4AF37" stroke-width="3" stroke-dasharray="8 4"/>
+        <circle cx="40" cy="160" r="6" fill="#22c55e" stroke="#fff" stroke-width="2"/><circle cx="360" cy="40" r="6" fill="#ef4444" stroke="#fff" stroke-width="2"/>
+        <text x="30" y="175" font-size="9" fill="#374151" font-family="sans-serif">São Paulo, SP</text>
+        <text x="350" y="30" font-size="9" fill="#374151" font-family="sans-serif" text-anchor="end">Cuiabá, MT</text>
+      </svg>
+    </div>
+    <div class="rounded-2xl border border-gray-100 bg-white p-4 mt-3 shadow-sm">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2"><svg class="h-4 w-4 text-marca-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg><span class="text-sm font-semibold text-marca-900">Rota Estimada</span></div>
+        <button onclick="novo_pedido_recalcular()" class="text-xs text-marca-600 font-medium flex items-center gap-1 active:scale-95 transition"><svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992h4.992m12.03 0h4.992v4.992M7.965 19.644h4.992m-4.992 0v-4.992m0 4.992l4.992-4.992m-4.992 0L2.985 14.652"/></svg>Recalcular</button>
+      </div>
+      <div class="flex items-center justify-between">
+        <div class="text-center flex-1"><p class="text-2xl font-bold text-marca-900" id="novo_pedido_distancia">1.647</p><p class="text-xs text-gray-500">km de distância</p></div>
+        <div class="w-px h-10 bg-gray-200 mx-3"></div>
+        <div class="text-center flex-1"><p class="text-2xl font-bold text-marca-900" id="novo_pedido_tempo">~22h</p><p class="text-xs text-gray-500">tempo médio</p></div>
+      </div>
+      <div class="mt-3 rounded-xl bg-gray-50 p-2.5"><div class="flex items-start gap-2"><svg class="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><p class="text-xs text-gray-500 leading-relaxed">Rota pela BR-163 e BR-060. Pedágios estimados: <strong class="text-marca-800">R$ 1.240,00</strong>. Considere paradas para descanso conforme legislação.</p></div></div>
+    </div>
+  </div>
+
+  <div id="novo_pedido_step_4" class="novo_pedido_step_content hidden">
+    <label class="block text-sm font-semibold text-marca-900 mb-2">Anexos</label>
+    <div class="grid grid-cols-2 gap-3 mb-4">
+      <button onclick="novo_pedido_upload('foto')" class="card flex flex-col items-center gap-2 p-4 transition text-center active:scale-95"><div class="flex h-12 w-12 items-center justify-center rounded-full bg-blue-50"><svg class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a2.25 2.25 0 002.25-2.25V6a2.25 2.25 0 00-2.25-2.25H3.75A2.25 2.25 0 001.5 6v11.25a2.25 2.25 0 002.25 2.25z"/></svg></div><span class="text-xs font-medium text-marca-900">Fotos da Carga</span><span class="text-xs text-gray-400">JPG, PNG</span></button>
+      <button onclick="novo_pedido_upload('doc')" class="card flex flex-col items-center gap-2 p-4 transition text-center active:scale-95"><div class="flex h-12 w-12 items-center justify-center rounded-full bg-amber-50"><svg class="h-6 w-6 text-marca-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V16.5m-10.5-6h9.75"/></svg></div><span class="text-xs font-medium text-marca-900">Documentos</span><span class="text-xs text-gray-400">PDF, DOC</span></button>
+    </div>
+    <div id="novo_pedido_anexos_list" class="space-y-2"></div>
+    <button onclick="novo_pedido_addObs()" class="mt-3 w-full rounded-xl border-2 border-dashed border-gray-200 py-3 text-sm text-gray-500 font-medium transition hover:border-marca-400 hover:text-marca-600 active:scale-[0.98]"><span class="flex items-center justify-center gap-1.5"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>Adicionar observação</span></button>
+  </div>
+
+  <div class="h-24"></div>
+  <div class="fixed bottom-0 left-0 right-0 z-20">
+    <div class="mx-auto max-w-[430px] bg-white/90 backdrop-blur-lg border-t border-gray-200 px-4 py-3">
+      <div class="flex gap-3" id="novo_pedido_btns">
+        <button onclick="novo_pedido_voltar()" id="novo_pedido_btn_voltar" class="hidden rounded-xl border border-gray-200 bg-white py-3 px-4 text-sm font-semibold text-gray-700 transition active:scale-95 hover:bg-gray-50">Voltar</button>
+        <button onclick="novo_pedido_avancar()" id="novo_pedido_btn_avancar" class="flex-1 rounded-xl bg-marca-900 py-3 text-sm font-bold text-marca-400 transition active:scale-95 hover:bg-marca-800">Avançar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="novo_pedido_modal_resumo" class="hidden"></div>
+</section>
+
+<script>
+(function(){
+  var np_estado={step:0,cliente:null,carga:null,origem:'',destino:'',peso:'',valor:'',prazo:'',anexos:[],obs:''};
+  var np_clientes=[{n:'Trans Mato Grosso LTDA',c:'12.345.678/0001-90',i:'TM',co:'bg-amber-100',tc:'text-marca-600'},{n:'Agropecuária Guarani',c:'98.765.432/0001-10',i:'AG',co:'bg-emerald-100',tc:'text-emerald-700'},{n:'Celulose Minas',c:'45.678.901/0001-55',i:'CM',co:'bg-blue-100',tc:'text-blue-700'},{n:'Distribuidora Sul',c:'34.567.890/0001-33',i:'DS',co:'bg-rose-100',tc:'text-rose-700'},{n:'Madeiras Paraná',c:'23.456.789/0001-77',i:'MP',co:'bg-violet-100',tc:'text-violet-700'},{n:'Café Brasil Export',c:'56.789.012/0001-99',i:'CB',co:'bg-orange-100',tc:'text-orange-700'}];
+  var np_enderecos=['Av. Paulista, 1000 - São Paulo, SP','Rua da Consolação, 500 - São Paulo, SP','Rod. Anhanguera, km 15 - Jundiaí, SP','Av. Brigadeiro Faria Lima, 1500 - São Paulo, SP','Rua das Flores, 230 - Campinas, SP','Av. Brasil, 5000 - Rio de Janeiro, RJ','Rua Oscar Freire, 300 - São Paulo, SP','Rod. Castelo Branco, km 25 - Sorocaba, SP','Av. República do Líbano, 750 - São Paulo, SP','Rua Vergueiro, 1200 - São Paulo, SP','Av. do Contorno, 4500 - Belo Horizonte, MG','Rua da Bahia, 800 - Belo Horizonte, MG','Av. Afonso Pena, 2000 - Belo Horizonte, MG','Rod. Fernão Dias, km 45 - Extrema, MG','Av. Amazonas, 3200 - Belo Horizonte, MG'];
+  var np_cargas=['Carga Geral','Granel Sólido','Refrigerada','Perigosa','Granel Líquido','Frigorificada'];
+  window.novo_pedido_filtrarClientes=function(q){
+    q=q.toLowerCase().trim();var r=document.getElementById('novo_pedido_cliente_results');var l=document.getElementById('novo_pedido_cliente_list');var e=document.getElementById('novo_pedido_empty_clients');
+    if(!q){r.classList.add('hidden');l.classList.remove('hidden');e.classList.add('hidden');return}
+    var f=np_clientes.filter(function(c){return c.n.toLowerCase().indexOf(q)>-1||c.c.replace(/\D/g,'').indexOf(q.replace(/\D/g,''))>-1});
+    if(!f.length){r.classList.add('hidden');l.classList.add('hidden');e.classList.remove('hidden');return}
+    l.classList.add('hidden');e.classList.add('hidden');r.classList.remove('hidden');
+    r.innerHTML=f.map(function(c,i){return'<div onclick="novo_pedido_selectCliente('+np_clientes.indexOf(c)+');document.getElementById(\'novo_pedido_cliente_results\').classList.add(\'hidden\')" class="cursor-pointer px-4 py-3 hover:bg-gray-50 transition border-b border-gray-50 last:border-0"><div class="flex items-center gap-3"><div class="flex h-9 w-9 items-center justify-center rounded-full '+c.co+' '+c.tc+' font-bold text-xs">'+c.i+'</div><div class="flex-1 min-w-0"><p class="font-semibold text-sm text-marca-900 truncate">'+c.n+'</p><p class="text-xs text-gray-500">'+c.c+'</p></div></div></div>'}).join('');
+  };
+  window.novo_pedido_selectCliente=function(i){np_estado.cliente=np_clientes[i];document.getElementById('novo_pedido_search_cliente').value=np_clientes[i].n;document.getElementById('novo_pedido_cliente_results').classList.add('hidden');document.getElementById('novo_pedido_cliente_list').classList.add('hidden');document.getElementById('novo_pedido_empty_clients').classList.add('hidden');var d=document.createElement('div');d.className='mt-3 rounded-xl bg-marca-50 border border-marca-100 p-3 flex items-center gap-3';d.innerHTML='<div class="flex h-9 w-9 items-center justify-center rounded-full '+np_clientes[i].co+' '+np_clientes[i].tc+' font-bold text-xs">'+np_clientes[i].i+'</div><div class="flex-1 min-w-0"><p class="font-semibold text-sm text-marca-900 truncate">'+np_clientes[i].n+'</p><p class="text-xs text-gray-500">'+np_clientes[i].c+'</p></div><svg class="h-5 w-5 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>';var p=document.getElementById('novo_pedido_search_cliente').parentNode;p.parentNode.insertBefore(d,p.nextSibling);toast('Cliente selecionado','ok')};
+  window.novo_pedido_filtrarEnderecos=function(tipo,q){
+    q=q.toLowerCase().trim();var el=document.getElementById('novo_pedido_'+tipo+'_results');
+    if(!q){el.classList.add('hidden');return}
+    var f=np_enderecos.filter(function(e){return e.toLowerCase().indexOf(q)>-1});
+    if(!f.length){el.classList.add('hidden');return}
+    el.classList.remove('hidden');
+    el.innerHTML=f.map(function(e){return'<div onclick="novo_pedido_selectEndereco(\''+tipo+'\',\''+e.replace(/'/g,"\\'")+'\')" class="cursor-pointer px-4 py-2.5 hover:bg-gray-50 transition border-b border-gray-50 last:border-0 text-sm text-gray-700">'+e+'</div>'}).join('');
+  };
+  window.novo_pedido_selectEndereco=function(t,v){np_estado[t]=v;document.getElementById('novo_pedido_'+t).value=v;document.getElementById('novo_pedido_'+t+'_results').classList.add('hidden')};
+  window.novo_pedido_selectCarga=function(b,t){document.querySelectorAll('.novo_pedido_carga_btn').forEach(function(x){x.classList.remove('border-marca-500','bg-marca-50');x.classList.add('border-gray-200','bg-white')});b.classList.remove('border-gray-200','bg-white');b.classList.add('border-marca-500','bg-marca-50');np_estado.carga=t};
+  window.novo_pedido_soNum=function(el){el.value=el.value.replace(/\D/g,'')};
+  window.novo_pedido_moeda=function(el){var v=el.value.replace(/\D/g,'');if(v.length>9)v=v.slice(0,9);if(v)v=parseInt(v,10);if(isNaN(v)){el.value='';return}var d=v%100;var i=Math.floor(v/100);el.value=(i?i.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.'):'0')+','+(d<10?'0'+d:d)};
+  window.novo_pedido_upload=function(t){var id='up_'+Date.now();var item={id:id,tipo:t,time:new Date().toLocaleString('pt-BR')};np_estado.anexos.push(item);var r=document.getElementById('novo_pedido_anexos_list');var ic=t==='foto'?'<svg class="h-4 w-4 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a2.25 2.25 0 002.25-2.25V6a2.25 2.25 0 00-2.25-2.25H3.75A2.25 2.25 0 002.25 6v11.25a2.25 2.25 0 002.25 2.25z"/></svg>':'<svg class="h-4 w-4 text-marca-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V16.5m-10.5-6h9.75"/></svg>';var nm=t==='foto'?'foto_carga_':+(np_estado.anexos.filter(function(a){return a.tipo===t}).length)+'.jpg':'doc_anexo_'+(np_estado.anexos.filter(function(a){return a.tipo===t}).length)+'.pdf';var d=document.createElement('div');d.id=id;d.className='rounded-xl border border-gray-100 bg-white p-3 flex items-center gap-3 shadow-sm';d.innerHTML=ic+'<div class="flex-1 min-w-0"><p class="text-sm font-medium text-marca-900 truncate">'+nm+'</p><p class="text-xs text-gray-400">'+item.time+'</p></div><button onclick="novo_pedido_removerAnexo(\''+id+'\')" class="p-1 rounded-full hover:bg-gray-100 transition"><svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.061-.94-1.75-1.995-1.75H9.77c-1.055 0-1.995.69-1.995 1.75v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg></button>';r.appendChild(d);toast(t==='foto'?'Foto adicionada':'Documento adicionado','ok')};
+  window.novo_pedido_removerAnexo=function(id){var el=document.getElementById(id);if(el){el.style.opacity='0';el.style.transform='translateX(100%)';el.style.transition='all 0.3s';setTimeout(function(){el.remove()},300)}np_estado.anexos=np_estado.anexos.filter(function(a){return a.id!==id});toast('Anexo removido','info')};
+  window.novo_pedido_recalcular=function(){var btn=event.currentTarget;btn.style.transform='rotate(360deg)';btn.style.transition='transform 0.5s';setTimeout(function(){btn.style.transform='rotate(0deg)';document.getElementById('novo_pedido_distancia').textContent=(1647+Math.floor(Math.random()*80-40)).toLocaleString('pt-BR');toast('Rota recalculada','ok')},500)};
+  window.novo_pedido_addObs=function(){np_estado.obs='Cliente solicitou coleta até às 14h. Entregar nota fiscal original.';var r=document.getElementById('novo_pedido_anexos_list');var d=document.createElement('div');d.className='rounded-xl bg-amber-50 border border-marca-100 p-3 flex items-start gap-2';d.innerHTML='<svg class="h-5 w-5 text-marca-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 011.037-.443 48.282 48.282 0 005.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"/></svg><div class="flex-1"><p class="text-xs text-marca-800 leading-relaxed">'+np_estado.obs+'</p></div>';r.insertBefore(d,r.firstChild);toast('Observação adicionada','ok')};
+  window.novo_pedido_setStep=function(s){np_estado.step=s;document.querySelectorAll('.novo_pedido_step_content').forEach(function(el){el.classList.add('hidden')});var c=document.getElementById('novo_pedido_step_'+s);if(c)c.classList.remove('hidden');var dots=document.querySelectorAll('[id^="novo_pedido_step_dot"]');var labels=['Selecione o cliente para este frete','Informe origem e destino da rota','Detalhes do frete e valores','Confirme a rota estimada','Anexe fotos e documentos'];var btns=['Avançar','Voltar','Avançar','Voltar','Avançar'];document.getElementById('novo_pedido_step_label').textContent='Passo '+(s+1)+' de 5';document.getElementById('novo_pedido_step_desc').textContent=labels[s];var v=document.getElementById('novo_pedido_btn_voltar');var a=document.getElementById('novo_pedido_btn_avancar');if(s===0){v.classList.add('hidden');a.textContent='Avançar';a.classList.remove('w-1/2');a.classList.add('flex-1')}else{v.classList.remove('hidden');v.textContent='Voltar';a.textContent=s===4?'Enviar Orçamento':'Avançar';a.classList.remove('flex-1');a.classList.add('flex-1')}if(s===4){a.className='rounded-xl bg-green-600 py-3 text-sm font-bold text-white transition active:scale-95 hover:bg-green-700 flex-1';a.textContent='Enviar Orçamento'}else{a.className='rounded-xl bg-marca-900 py-3 text-sm font-bold text-marca-400 transition active:scale-95 hover:bg-marca-800 flex-1'}dots.forEach(function(d){d.classList.remove('bg-marca-500');d.classList.add('bg-gray-200')});for(var i=0;i<=s;i++){var ds=document.querySelector('[data-step="'+i+'"]');if(ds){ds.classList.remove('bg-gray-200');ds.classList.add('bg-marca-500')}}};
+  window.novo_pedido_avancar=function(){if(np_estado.step===0&&!np_estado.cliente){toast('Selecione um cliente','erro');return}if(np_estado.step===1&&(!np_estado.origem||!np_estado.destino)){toast('Informe origem e destino','erro');return}if(np_estado.step===2){var peso=document.getElementById('novo_pedido_peso').value;var valor=document.getElementById('novo_pedido_valor').value;if(!np_estado.carga){toast('Selecione o tipo de carga','erro');return}if(!peso){toast('Informe o peso da carga','erro');return}np_estado.peso=peso;np_estado.valor=valor||'0,00'}if(np_estado.step===4){novo_pedido_enviar();return}novo_pedido_setStep(np_estado.step+1)};
+  window.novo_pedido_voltar=function(){if(np_estado.step>0)novo_pedido_setStep(np_estado.step-1)};
+  window.novo_pedido_enviar=function(){if(np_estado.cliente&&np_estado.origem&&np_estado.destino&&np_estado.carga){mostrarTela('orcamentos');toast('Orçamento enviado com sucesso!','ok')}else{toast('Preencha todos os dados obrigatórios','erro')}};
+  window.novo_pedido_salvarRascunho=function(){toast('Rascunho salvo com sucesso','ok')};
+  window.novo_pedido_cancelar=function(){abrirModal('<div class="text-center py-4"><svg class="h-12 w-12 text-gray-300 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg><p class="text-sm text-gray-600 mb-4">Deseja descartar o pedido?</p><div class="flex gap-3"><button onclick="fecharModal()" class="flex-1 rounded-xl border border-gray-200 py-2.5 text-sm font-medium text-gray-700">Continuar</button><button onclick="fecharModal();novo_pedido_limpar()" class="flex-1 rounded-xl bg-red-500 py-2.5 text-sm font-medium text-white">Descartar</button></div></div>','Descartar pedido?')};
+  window.novo_pedido_limpar=function(){np_estado={step:0,cliente:null,carga:null,origem:'',destino:'',peso:'',valor:'',prazo:'',anexos:[],obs:''};document.getElementById('novo_pedido_search_cliente').value='';document.getElementById('novo_pedido_origem').value='';document.getElementById('novo_pedido_destino').value='';document.getElementById('novo_pedido_peso').value='';document.getElementById('novo_pedido_valor').value='';document.getElementById('novo_pedido_prazo').value='';document.getElementById('novo_pedido_anexos_list').innerHTML='';document.querySelectorAll('.novo_pedido_carga_btn').forEach(function(x){x.classList.remove('border-marca-500','bg-marca-50');x.classList.add('border-gray-200','bg-white')});document.querySelectorAll('.novo_pedido_step_content').forEach(function(el){el.classList.add('hidden')});var dots=document.querySelectorAll('[id^="novo_pedido_step_dot"]');dots.forEach(function(d){d.classList.remove('bg-marca-500');d.classList.add('bg-gray-200')});document.getElementById('novo_pedido_step_0').classList.remove('hidden');document.getElementById('novo_pedido_step_label').textContent='Passo 1 de 5';document.getElementById('novo_pedido_step_desc').textContent='Selecione o cliente para este frete';var v=document.getElementById('novo_pedido_btn_voltar');var a=document.getElementById('novo_pedido_btn_avancar');v.classList.add('hidden');a.textContent='Avançar';a.className='rounded-xl bg-marca-900 py-3 text-sm font-bold text-marca-400 transition active:scale-95 hover:bg-marca-800 flex-1';toast('Pedido descartado','info')};
+  document.addEventListener('click',function(e){if(!e.target.closest('#novo_pedido_search_cliente')&&!e.target.closest('#novo_pedido_cliente_results')){var r=document.getElementById('novo_pedido_cliente_results');if(r)r.classList.add('hidden')}if(!e.target.closest('#novo_pedido_origem')&&!e.target.closest('#novo_pedido_origem_results')){var ro=document.getElementById('novo_pedido_origem_results');if(ro)ro.classList.add('hidden')}if(!e.target.closest('#novo_pedido_destino')&&!e.target.closest('#novo_pedido_destino_results')){var rd=document.getElementById('novo_pedido_destino_results');if(rd)rd.classList.add('hidden')}});
+  novo_pedido_setStep(0);
+})();
+</script>
+
     <!-- TELAS -->
     </main>
 
