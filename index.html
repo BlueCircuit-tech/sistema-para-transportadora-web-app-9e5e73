@@ -3436,6 +3436,287 @@ motoristas_render(motoristas_dados);
     })();
     </script>
 
+    <section data-tela="notificacoes" class="hidden">
+  <div class="px-4 pt-6 pb-2 space-y-4 animate-screen">
+    <!-- Cabeçalho -->
+    <div class="flex items-start justify-between">
+      <div>
+        <h1 class="text-xl font-display font-bold text-grey-900">Notificações</h1>
+        <p class="text-xs text-grey-500 mt-0.5">3 não lidas</p>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="notificacoes_marcarTodas()" class="text-xs px-3 py-1.5 rounded-lg border border-marca-300 text-marca-700 font-semibold hover:bg-marca-50 active:scale-95 transition-all">Marcar lidas</button>
+        <button onclick="notificacoes_preferencias()" class="p-1.5 rounded-lg border border-grey-200 hover:bg-grey-100 active:scale-95 transition-all">
+          <svg class="w-5 h-5 text-grey-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Badge WhatsApp -->
+    <div class="flex items-center gap-2 bg-green-50 border border-green-200 rounded-xl px-3 py-2">
+      <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <span class="text-xs text-green-700 font-medium">Integração WhatsApp ativa — notificações externas enviadas automaticamente</span>
+    </div>
+
+    <!-- Filtros -->
+    <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide" id="filtros-container">
+      <button onclick="notificacoes_filtrar('todos')" data-filtro="todos" class="filtro-btn active-filtro whitespace-nowrap text-xs px-4 py-2 rounded-xl font-semibold transition-all active:scale-95">Todos</button>
+      <button onclick="notificacoes_filtrar('pedidos')" data-filtro="pedidos" class="filtro-btn whitespace-nowrap text-xs px-4 py-2 rounded-xl font-semibold transition-all active:scale-95">📦 Pedidos</button>
+      <button onclick="notificacoes_filtrar('financeiro')" data-filtro="financeiro" class="filtro-btn whitespace-nowrap text-xs px-4 py-2 rounded-xl font-semibold transition-all active:scale-95">💰 Financeiro</button>
+      <button onclick="notificacoes_filtrar('sistema')" data-filtro="sistema" class="filtro-btn whitespace-nowrap text-xs px-4 py-2 rounded-xl font-semibold transition-all active:scale-95">⚙️ Sistema</button>
+    </div>
+
+    <!-- Busca -->
+    <div class="relative">
+      <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-grey-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <input type="text" id="busca-notif" oninput="notificacoes_buscar(this.value)" placeholder="Buscar notificação..." class="w-full pl-9 pr-4 py-2.5 text-sm border border-grey-200 rounded-xl bg-grey-50 focus:bg-white focus:border-marca-400 focus:ring-1 focus:ring-marca-400 outline-none transition-all">
+    </div>
+
+    <!-- Lista de notificações -->
+    <div id="lista-notificacoes" class="space-y-1"></div>
+
+    <!-- Estado vazio -->
+    <div id="notif-vazio" class="hidden text-center py-12">
+      <svg class="w-16 h-16 mx-auto text-grey-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+      <p class="text-sm text-grey-500 font-medium">Nenhuma notificação encontrada</p>
+      <p class="text-xs text-grey-400 mt-1">Tente alterar os filtros ou busca</p>
+    </div>
+  </div>
+
+  <!-- Modal de detalhe -->
+  <div id="notif-modal" class="hidden fixed inset-0 z-50 flex items-end justify-center bg-black/50">
+    <div class="bg-white rounded-t-2xl w-full max-w-[430px] p-5 space-y-4 animate-slide-up">
+      <div class="flex items-center justify-between">
+        <h3 class="font-display font-bold text-lg" id="notif-modal-titulo">Detalhe</h3>
+        <button onclick="fecharModal()" class="p-1.5 rounded-lg hover:bg-grey-100 active:scale-95 transition-all">
+          <svg class="w-5 h-5 text-grey-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div id="notif-modal-conteudo" class="text-sm text-grey-700 space-y-3"></div>
+      <div class="flex gap-2 pt-2">
+        <button onclick="notificacoes_acaoModal()" class="flex-1 bg-marca-700 text-white text-sm font-semibold py-3 rounded-xl active:scale-95 transition-all">Ação</button>
+        <button onclick="fecharModal()" class="flex-1 border border-grey-200 text-grey-700 text-sm font-semibold py-3 rounded-xl active:scale-95 transition-all">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function() {
+    const ICONS = {
+      orcamento: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>',
+      pedido: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>',
+      alerta: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>',
+      vale: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
+      pagamento: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
+      sistema: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>'
+    };
+
+    const CORES_ICONE = {
+      orcamento: 'bg-blue-100 text-blue-600',
+      pedido: 'bg-emerald-100 text-emerald-600',
+      alerta: 'bg-red-100 text-red-600',
+      vale: 'bg-amber-100 text-amber-600',
+      pagamento: 'bg-green-100 text-green-600',
+      sistema: 'bg-grey-100 text-grey-600'
+    };
+
+    let notificacoes = [
+      { id: 1, tipo: 'pedido', categoria: 'pedidos', titulo: 'Pedido #4872 aprovado', descricao: 'Carlos Mendes aprovou o pedido de coleta para Transportes Brasil Ltda', data: '2025-06-15T10:30:00', lida: false, destino: 'detalhe-do-pedido' },
+      { id: 2, tipo: 'financeiro', categoria: 'financeiro', titulo: 'Pagamento de comissão confirmado', descricao: 'R$ 2.450,00 referente à entrega #3211 foi creditado para João Silva', data: '2025-06-15T09:15:00', lida: false, destino: 'comissoes-e-vales' },
+      { id: 3, tipo: 'vale', categoria: 'financeiro', titulo: 'Solicitação de vale recebida', descricao: 'Motorista Roberto Santos solicitou vale de R$ 350,00 para pedágio e combustível', data: '2025-06-15T08:45:00', lida: false, destino: 'comissoes-e-vales' },
+      { id: 4, tipo: 'alerta', categoria: 'pedidos', titulo: 'Atraso na entrega #4899', descricao: 'Previsão de chegada ultrapassada em 4h. Rota: São Paulo → Curitiba', data: '2025-06-14T18:20:00', lida: true, destino: 'entregas-do-dia' },
+      { id: 5, tipo: 'orcamento', categoria: 'pedidos', titulo: 'Novo orçamento recebido', descricao: 'Logística ABC solicitou orçamento para 5 viagens mensais SP–RJ', data: '2025-06-14T14:00:00', lida: true, destino: 'orcamentos' },
+      { id: 6, tipo: 'sistema', categoria: 'sistema', titulo: 'Atualização do sistema v3.2', descricao: 'Nova funcionalidade de rastreamento em tempo real disponível', data: '2025-06-14T10:00:00', lida: true, destino: null }
+    ];
+
+    let filtroAtual = 'todos';
+    let buscaAtual = '';
+    let notifSelecionada = null;
+
+    function horaRelativa(iso) {
+      const d = new Date(iso);
+      const agora = new Date();
+      const diff = (agora - d) / 1000;
+      if (diff < 60) return 'agora há pouco';
+      if (diff < 3600) return Math.floor(diff / 60) + ' min atrás';
+      if (diff < 86400) return Math.floor(diff / 3600) + 'h atrás';
+      return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+    }
+
+    function dataGrupo(iso) {
+      const d = new Date(iso);
+      const hoje = new Date();
+      const ontem = new Date(hoje); ontem.setDate(hoje.getDate() - 1);
+      if (d.toDateString() === hoje.toDateString()) return 'Hoje';
+      if (d.toDateString() === ontem.toDateString()) return 'Ontem';
+      return d.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' });
+    }
+
+    function renderizar() {
+      const container = document.getElementById('lista-notificacoes');
+      const vazio = document.getElementById('notif-vazio');
+      let filtradas = notificacoes;
+      if (filtroAtual !== 'todos') filtradas = filtradas.filter(n => n.categoria === filtroAtual);
+      if (buscaAtual) {
+        const q = buscaAtual.toLowerCase();
+        filtradas = filtradas.filter(n => n.titulo.toLowerCase().includes(q) || n.descricao.toLowerCase().includes(q));
+      }
+
+      const naoLidas = notificacoes.filter(n => !n.lida).length;
+      document.querySelector('.text-grey-500.mt-0\\.5, .text-xs.text-grey-500') && (document.querySelector('.text-xs.text-grey-500').textContent = naoLidas + ' não lidas');
+
+      if (filtradas.length === 0) {
+        container.innerHTML = '';
+        vazio.classList.remove('hidden');
+        return;
+      }
+      vazio.classList.add('hidden');
+
+      const grupos = {};
+      filtradas.forEach(n => {
+        const g = dataGrupo(n.data);
+        if (!grupos[g]) grupos[g] = [];
+        grupos[g].push(n);
+      });
+
+      container.innerHTML = Object.entries(grupos).map(([grupo, items]) => `
+        <div class="pt-3">
+          <p class="text-[10px] font-semibold text-grey-400 uppercase tracking-wider px-1 mb-1.5">${grupo}</p>
+          <div class="space-y-1">
+            ${items.map(n => `
+              <button onclick="notificacoes_abrir(${n.id})" class="w-full text-left flex gap-3 p-3 rounded-xl transition-all active:scale-[0.98] ${n.lida ? 'bg-white' : 'bg-marca-50 border border-marca-100'} hover:shadow-sm">
+                <div class="flex-shrink-0 w-10 h-10 rounded-xl ${CORES_ICONE[n.tipo]} flex items-center justify-center">
+                  ${ICONS[n.tipo]}
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-start justify-between gap-2">
+                    <p class="text-sm font-semibold ${n.lida ? 'text-grey-700' : 'text-grey-900'} truncate">${n.titulo}</p>
+                    ${!n.lida ? '<span class="w-2 h-2 rounded-full bg-marca-500 flex-shrink-0 mt-1.5"></span>' : ''}
+                  </div>
+                  <p class="text-xs text-grey-500 mt-0.5 line-clamp-2">${n.descricao}</p>
+                  <p class="text-[10px] text-grey-400 mt-1">${horaRelativa(n.data)}</p>
+                </div>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.notificacoes_filtrar = function(cat) {
+      filtroAtual = cat;
+      document.querySelectorAll('.filtro-btn').forEach(b => {
+        const isActive = b.dataset.filtro === cat;
+        b.className = 'filtro-btn whitespace-nowrap text-xs px-4 py-2 rounded-xl font-semibold transition-all active:scale-95 ' + (isActive ? 'active-filtro' : 'text-grey-500 hover:bg-grey-100');
+      });
+      renderizar();
+    };
+
+    window.notificacoes_buscar = function(val) {
+      buscaAtual = val.trim();
+      renderizar();
+    };
+
+    window.notificacoes_marcarTodas = function() {
+      notificacoes.forEach(n => n.lida = true);
+      renderizar();
+      toast('Todas as notificações marcadas como lidas', 'ok');
+    };
+
+    window.notificacoes_abrir = function(id) {
+      const n = notificacoes.find(x => x.id === id);
+      if (!n) return;
+      n.lida = true;
+      notifSelecionada = n;
+      renderizar();
+
+      const modal = document.getElementById('notif-modal');
+      const titulo = document.getElementById('notif-modal-titulo');
+      const conteudo = document.getElementById('notif-modal-conteudo');
+
+      titulo.textContent = n.titulo;
+      const d = new Date(n.data);
+      conteudo.innerHTML = `
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-8 h-8 rounded-lg ${CORES_ICONE[n.tipo]} flex items-center justify-center">${ICONS[n.tipo]}</div>
+          <span class="text-xs font-semibold text-grey-500 uppercase">${n.categoria}</span>
+        </div>
+        <p>${n.descricao}</p>
+        <p class="text-xs text-grey-400">${d.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' })} às ${d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</p>
+        <div class="bg-grey-50 rounded-xl p-3 mt-2">
+          <p class="text-xs text-grey-500 font-medium mb-1">Ações disponíveis</p>
+          ${n.destino ? `<p class="text-xs text-grey-600">Toque em <strong>Ação</strong> para navegar</p>` : '<p class="text-xs text-grey-400">Sem navegação associada</p>'}
+        </div>
+      `;
+      modal.classList.remove('hidden');
+    };
+
+    window.notificacoes_acaoModal = function() {
+      fecharModal();
+      if (notifSelecionada && notifSelecionada.destino) {
+        mostrarTela(notifSelecionada.destino);
+        toast('Navegando...', 'info');
+      }
+    };
+
+    window.notificacoes_preferencias = function() {
+      const modal = document.getElementById('notif-modal');
+      document.getElementById('notif-modal-titulo').textContent = 'Preferências';
+      document.getElementById('notif-modal-conteudo').innerHTML = `
+        <p class="text-sm font-semibold text-grey-700 mb-2">Canais de notificação</p>
+        <div class="space-y-2">
+          <label class="flex items-center justify-between p-3 bg-grey-50 rounded-xl cursor-pointer">
+            <span class="text-sm">📱 Push no app</span>
+            <input type="checkbox" checked class="accent-marca-600 w-5 h-5">
+          </label>
+          <label class="flex items-center justify-between p-3 bg-grey-50 rounded-xl cursor-pointer">
+            <span class="text-sm">💬 WhatsApp</span>
+            <input type="checkbox" checked class="accent-marca-600 w-5 h-5">
+          </label>
+          <label class="flex items-center justify-between p-3 bg-grey-50 rounded-xl cursor-pointer">
+            <span class="text-sm">📧 E-mail</span>
+            <input type="checkbox" class="accent-marca-600 w-5 h-5">
+          </label>
+        </div>
+        <p class="text-sm font-semibold text-grey-700 mt-3 mb-2">Tipos de notificação</p>
+        <div class="space-y-2">
+          <label class="flex items-center justify-between p-3 bg-grey-50 rounded-xl cursor-pointer">
+            <span class="text-sm">📦 Pedidos</span>
+            <input type="checkbox" checked class="accent-marca-600 w-5 h-5">
+          </label>
+          <label class="flex items-center justify-between p-3 bg-grey-50 rounded-xl cursor-pointer">
+            <span class="text-sm">💰 Financeiro</span>
+            <input type="checkbox" checked class="accent-marca-600 w-5 h-5">
+          </label>
+          <label class="flex items-center justify-between p-3 bg-grey-50 rounded-xl cursor-pointer">
+            <span class="text-sm">⚠️ Alertas</span>
+            <input type="checkbox" checked class="accent-marca-600 w-5 h-5">
+          </label>
+          <label class="flex items-center justify-between p-3 bg-grey-50 rounded-xl cursor-pointer">
+            <span class="text-sm">⚙️ Sistema</span>
+            <input type="checkbox" class="accent-marca-600 w-5 h-5">
+          </label>
+        </div>
+      `;
+      modal.classList.remove('hidden');
+    };
+
+    // Estilos dinâmicos mínimos
+    const style = document.createElement('style');
+    style.textContent = `.active-filtro{background:#D4AF37;color:#0A0A00}.line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.scrollbar-hide::-webkit-scrollbar{display:none}.animate-slide-up{animation:slideUp .3s ease-out}@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}`;
+    document.head.appendChild(style);
+
+    // Inicializar filtros visuais
+    document.querySelectorAll('.filtro-btn').forEach(b => {
+      if (b.dataset.filtro === 'todos') b.className = 'filtro-btn active-filtro whitespace-nowrap text-xs px-4 py-2 rounded-xl font-semibold transition-all active:scale-95';
+      else b.className = 'filtro-btn whitespace-nowrap text-xs px-4 py-2 rounded-xl font-semibold transition-all active:scale-95 text-grey-500 hover:bg-grey-100';
+    });
+
+    renderizar();
+  })();
+  </script>
+</section>
+
     <!-- TELAS -->
     </main>
 
